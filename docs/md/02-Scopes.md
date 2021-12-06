@@ -127,7 +127,20 @@ En el `@RequestParam()`, si se indican más de un atributo (`name` y `required`)
 
 Hacer una aplicación Spring Web que haga lo siguiente:
 
-Usar la clase Planeta del repositorio del curso e incluirla en el proyecto dentro de un paquete pojos.El controlador principal, iniciará una página que es un formulario que tiene un cuadro de texto (de tipo number con límite inferior y superior, mínimo 1, máximo 1.500) para introducir el número de planetas que queremos crear, enviando la información a una url llamada “/crear”.En el método mapeado con la url “/crear”, crearemos un Arraylist de Planetas, y lo llenaremos de tantos planetas como hayamos indicado en el formulario (con el constructor que creaba planetas aleatorios).Seguidamente, enviaremos la lista a una vista llamada listado.jsp (a la cual tendremos que crear su url para poder acceder a ella).Para asegurarnos que el objeto ArrayList<Planeta> llega a la vista, mostrar inicialmente el contenido del mismo usando ${nombreObjeto}.Una vez que sabemos que el objeto ArrayList llega correctamente a la vista, deberemos hacer una tabla html que represente de una forma visual y tope bonita el listado de planetas con sus atributos.Añadir bootstrap a la vista listado.jsp.
+- Usar la clase [Planeta del repositorio del curso](https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-3) e incluirla en el proyecto dentro de un paquete llamado pojos.
+- El controlador principal, nos llevará a una página inicial que es un formulario que tiene
+  - Un cuadro de texto normal con el nombre de la galaxia que vamos a crear.
+  - Un cuadro de texto (de tipo number con límite inferior y superior, mínimo 1, máximo 1.500) para introducir el número de planetas que queremos crear.
+- El formulario enviará la información por método `GET` a la url `/crear` .
+- Creamos un método en un controlador (nuevo o el principal) para recibir la información en `/crear` y hacer:
+  - Extraemos los parámetros de la petición (nombre de la galaxia y número de planetas). Probar a imprimirlos por consola `System.out.println()` para asegurarnos que los estamos recibiendo correctamente.
+  - El número de planetas NO ES OBLIGATORIO, por lo que podrían enviar el formulario sin rellenar el campo. En ese caso, se creará una galaxia genérica de 500 planetas. No debería de saltar ninguna excepción.
+  - La clase Planeta, posee un constructor por defecto, que crea un Planeta con valores aleatorios. (`Planeta p = new Planeta()`)
+  - Creamos un `Arraylist` de Planetas, y lo llenamos de tantos planetas (usando el constructor que crea planetas aleatorios) como hayamos indicado en el formulario.
+  - Una vez creada la galaxia, enviaremos el nombre y la lista de planetas a una vista llamada `listado.html` (a la cual tendremos que mapear su url `/listado` para poder acceder a ella). 
+- Para asegurarnos que el objeto `ArrayList<Planeta>` llega a la vista, mostrar inicialmente el contenido del mismo sin en un párrafo o algo similar de la forma más simple posible.
+- Una vez que sabemos que el objeto ArrayList llega correctamente a la vista, deberemos mostrar el nombre de la galaxia, y una tabla HTML con los planetas y sus atributos.
+- Si tuviéramos que mostrar el número de planetas que pueden albergar vida. ¿Cómo lo haríamos?
 
 # @PathVariable. Obtener parámetros con url amigables
 
@@ -160,6 +173,16 @@ public String borrar (@PathVariable Integer id)
 @GetMapping("borrar/{idEmpleado}")
 public String borrar(@PathVariable(idEmpleado) Integer id) 
 ```
+
+
+
+## Práctica 4
+
+Añadir un nuevo método a la práctica 3, para usar una url amigable en lugar del formulario. Es decir, que si voy a la url `/crear/andromeda/4000000` directamente sin usar el formulario, debería llevarme a `listado.html` y mostrar la misma tabla. Probar que ambas formas coexisten perfectamente.
+
+💡No intentes reaprovechar el código ya existente en el otro método. Copia las líneas que se tengan que repetir del anterior.
+
+💡Pero… ¿y si queremos aprovechar el código ya escrito? Nos vendría bien algo como `redirect:/crear?...`
 
 # Scopes
 
@@ -229,7 +252,7 @@ Así se indicaría que se necesitan 10 minutos de inactividad para el cierre de 
 
 > **Nota:** Para una lista completa de configuraciones que se pueden aplicar al servidor en el `application.properties`, mirar en https://docs.spring.io/spring-boot/docs/2.6.x/reference/html/application-properties.html#application-properties.server
 
-Veamos un ejemplo muy usado para el ámbito de la sesión, que sería guardar el usuario activo en la sesión:
+Veamos un ejemplo muy usado para el ámbito de la sesión, que sería guardar el usuario activo:
 
 **Desde Java**
 
@@ -257,7 +280,28 @@ Tenemos dos métodos:
 - `validar()` -> Creamos un usuario, y lo insertaría si pasa una supuesta validación. Si la pasa, vamos a la vista `validar`, en caso contrario de que no pase la validación lo mandaríamos a la vista `login` (para que se identifique de nuevo por ejemplo).
 - `logout()` -> Invalidamos la sesión, y vamos a la vista `validar`.
 
-En ambos métodos, inyectamos el objeto `HttpSession`, y lo usamos o bien para añadirle los objetos que queramos con `.setAttribute()` o bien para invalidar la sesión con `.invalidate()`.
+En ambos métodos, inyectamos el objeto `HttpSession`, y lo usamos o bien para añadirle los objetos que queramos con `.setAttribute()` o bien para invalidar la sesión con `.invalidate()`. Si necesitamos recuperar objetos ya insertados previamente usaríamos el método `.getAttribute()`, el cual devuelve un Object, por lo que tendríamos que hacerle el casting correcto. Por ejemplo, para recuperar el mismo objeto de la clase `User` que metimos en la sesión, sería:
+
+```java
+User userRecuperado = (User) session.getAttribute("user");
+```
+
+También se puede usar la anotación `@SessionAttribute` en la firma del método y funciona de forma parecida a como ya lo hacen `@RequestParam` y `@PathVariable`. Esto nos ahorraría tener que inyectar el `HttpSession`, usar el `.getAttribute()` y hacer el casting.
+
+```java
+@RequestMapping("/")
+public String login(@SessionAttribute(value="user", required = false) User userActivo) {
+    if (userActivo != null) {
+        return "home";
+    } else {
+        return "login";
+    }
+}
+```
+
+Una vez visto como lo guardamos desde el controlador en la sesión, veremos como recuperar esa información desde la vista.
+
+
 
 **Desde la vista**
 
@@ -273,6 +317,43 @@ En ambos métodos, inyectamos el objeto `HttpSession`, y lo usamos o bien para a
 ```
 
 En la vista, recuperamos el objeto `usuarioActivo`, que si venimos de `validar()` si existirá en el sessionScope, y si venimos de `logout()` no. 
+
+
+
+### Práctica 5
+
+Hacer una aplicación en Spring Boot que simule una autentificación de usuario. La web inicialmente nos lleva a `login.html` y si la validación es correcta, nos lleva a la página principal de la aplicación, `home.html`. 
+
+![](img/02/01.png)
+
+**Crear la siguiente estructura de paquetes / clases:**
+
+- Paquete `controllers`
+  - `HomeController`: Llevará directamente a `login.html`.
+  - `UserController`: Controlará las url para validar usuario y cerrar sesión de usuario.
+- Paquete `users` -> Estas clases están en el [repositorio de la práctica](https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-5).
+  - Clase `User`: Es un pojo que representa un usuario dentro de la aplicación.
+  - Clase `UserService`: Es un servicio (se detallarán más adelante) que hace una simulación de una validación, devolviendo true si el usuario es válido (si su contraseña es 12345 🙂).
+
+**Crear las siguientes vistas:**
+
+- `login.html` -> Es un formulario con dos cuadros de texto que envía la información al `UserController`,  a `/usuarios/validar` por método `POST`. 
+- `home.html` -> Es la simulación de una página principal. Un mensaje de bienvenida y un menú con varias opciones de adorno. Una de ellas pondrá “Cerrar Sesión”.
+
+**En los controladores:**
+
+- `/usuarios/validar` -> Extraemos los valores de la petición. Creamos un objeto `User` con los valores extraídos, y:
+  - Si son válidos (que el password sea ‘12345’) tenemos que ir a `home.html`, pero insertando el usuario ya validado en la sesión.
+  - Si no es válido tendremos que volver a `login.html`, enviando un mensaje de “Usuario y/o contraseña no válidos” para la vista.
+  - Para comprobar si un usuario es válido o no, podemos comprobarlo manualmente, o bien usando la clase `UserService`, que tiene un métod
+- `/usuarios/logout` -> Invalidaremos la sesión actual, y nos vamos a `login.html`. Usaremos esta url en la opción del menú principal “Cerrar sesión”.
+- `/` -> Inicialmente íbamos directos a `login.html`. Ahora tendremos que comprobar primero:
+  - Si hay un usuario en la sesión, en ese caso vamos a `home.html` (si existe el usuario en la sesión, ya está validado, por lo que no hay que comprobar nada más).
+  - Si no hay un usuario en la sesión, es que no hay sesiones activas por lo que seguimos yendo a `login.html`, como hacíamos inicialmente.
+
+Si cerramos el navegador y volvemos a entrar en la app, mientras siga la sesión abierta, nos deberá llevar directamente `home.html` (en vez de a `login.html`). Si no hay sesión activa, será cuando vayamos a `login.html`.
+
+Si todo va bien, no habrá posibilidad de ir a la página principal sin iniciar sesión validando al usuario primero.
 
 
 
