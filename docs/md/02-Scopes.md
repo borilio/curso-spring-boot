@@ -123,6 +123,8 @@ Se ha usado una clase envoltorio `Integer` para la variable `identificacion`, ya
 
 En el `@RequestParam()`, si se indican más de un atributo (`name` y `required`), han de indicarse con pares de nombre=valor separados por comas. Si solo se indica el nombre del parámetro, solo seria necesario indicarle el valor Ej: `@RequestParam("id")`. 
 
+------
+
 ## Práctica 3
 
 Hacer una aplicación Spring Web que haga lo siguiente:
@@ -141,6 +143,8 @@ Hacer una aplicación Spring Web que haga lo siguiente:
 - Para asegurarnos que el objeto `ArrayList<Planeta>` llega a la vista, mostrar inicialmente el contenido del mismo sin en un párrafo o algo similar de la forma más simple posible.
 - Una vez que sabemos que el objeto ArrayList llega correctamente a la vista, deberemos mostrar el nombre de la galaxia, y una tabla HTML con los planetas y sus atributos.
 - Si tuviéramos que mostrar el número de planetas que pueden albergar vida. ¿Cómo lo haríamos?
+
+------
 
 # @PathVariable. Obtener parámetros con url amigables
 
@@ -176,6 +180,8 @@ public String borrar(@PathVariable(idEmpleado) Integer id)
 
 
 
+------
+
 ## Práctica 4
 
 Añadir un nuevo método a la práctica 3, para usar una url amigable en lugar del formulario. Es decir, que si voy a la url `/crear/andromeda/4000000` directamente sin usar el formulario, debería llevarme a `listado.html` y mostrar la misma tabla. Probar que ambas formas coexisten perfectamente.
@@ -183,6 +189,8 @@ Añadir un nuevo método a la práctica 3, para usar una url amigable en lugar d
 💡No intentes reaprovechar el código ya existente en el otro método. Copia las líneas que se tengan que repetir del anterior.
 
 💡Pero… ¿y si queremos aprovechar el código ya escrito? Nos vendría bien algo como `redirect:/crear?...`
+
+------
 
 # Scopes
 
@@ -318,7 +326,7 @@ Una vez visto como lo guardamos desde el controlador en la sesión, veremos como
 
 En la vista, recuperamos el objeto `usuarioActivo`, que si venimos de `validar()` si existirá en el sessionScope, y si venimos de `logout()` no. 
 
-
+---
 
 ### Práctica 5
 
@@ -331,7 +339,7 @@ Hacer una aplicación en Spring Boot que simule una autentificación de usuario.
 - Paquete `controllers`
   - `HomeController`: Llevará directamente a `login.html`.
   - `UserController`: Controlará las url para validar usuario y cerrar sesión de usuario.
-- Paquete `users` -> Estas clases están en el [repositorio de la práctica](https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-5).
+- Paquete `users` -> Estas clases están en el [repositorio de la práctica](https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-5). Habrá que corregir la ruta de los paquetes que hayas usado en tu proyecto.
   - Clase `User`: Es un pojo que representa un usuario dentro de la aplicación.
   - Clase `UserService`: Es un servicio (se detallarán más adelante) que hace una simulación de una validación, devolviendo true si el usuario es válido (si su contraseña es 12345 🙂).
 
@@ -355,7 +363,7 @@ Si cerramos el navegador y volvemos a entrar en la app, mientras siga la sesión
 
 Si todo va bien, no habrá posibilidad de ir a la página principal sin iniciar sesión validando al usuario primero.
 
-
+—
 
 ## Application Scope
 
@@ -409,7 +417,7 @@ Al entrar en la url `/registrar-visita`, lo primero que hacemos es recuperar un 
 
 Recuperamos ese valor y lo mostramos como queramos.
 
-💡 Con el applicationScope no podemos inyectar el objeto `ServletContext` en el método, como hemos visto con el Request o Session. Sin embargo, la técnica de usar el objeto como atributo del controlador usando la anotación `@Autowired` sí que podemos usarla en otros objetos de Spring (los ya vistos y otros que veremos, como los repositorios). Sólo hay que poner la anotación justo encima de la declaración de cada atributo y Spring hará el resto de la magia. Como cualquier atributo de una clase de Java, estará disponible para todos los métodos del controlador, sin necesidad de tener que inyectarlo en cada uno de los métodos que lo necesitemos.
+💡 Con el applicationScope no podemos inyectar el objeto `ServletContext` en el método, como hemos visto con el Request o Session. Sin embargo, la técnica de usar el objeto como atributo del controlador usando la anotación `@Autowired` sí que podemos usarla en otros objetos de Spring (los ya vistos y otros que veremos, como los repositorios o servicios). Sólo hay que poner la anotación justo encima de la declaración de cada atributo y Spring hará el resto de la magia. Como cualquier atributo de una clase de Java, estará disponible para todos los métodos del controlador, sin necesidad de tener que inyectarlo en cada uno de los métodos que lo necesitemos.
 
 ```java
 @Controller
