@@ -130,7 +130,7 @@ public class ArticulosServiceImpl implements ArticulosService {
 }
 ```
 
-Ahora necesitamos en el controlador que usemos instanciar un objeto de la clase `ArticulosServiceImpl` y se hace usando la inyección de dependencias. Usando la anotación **`@Autowired`** sobre la **interfaz** `ArticulosService`, Spring inyectará un objeto que implemente dicha interfaz. 
+Ahora necesitamos en el controlador donde usemos el servicio, una instancia del objeto de la clase `ArticulosServiceImpl` y se hace usando la inyección de dependencias. Usando la anotación **`@Autowired`** sobre la **interfaz** `ArticulosService`, Spring inyectará un objeto que implemente dicha interfaz. 
 
 ```java
 @Controller
@@ -163,7 +163,7 @@ Ya podemos usar de una forma simple y eficiente los servicios de `ArticuloServic
 
 ## ¿Qué es REST?
 
-REST es un acrónimo de ***RE**epresentational **S**tate **T**ransfer*. En pocas palabras, si HTTP es transferencia de archivos, REST se basa en transferencia de recursos. Aunque ambos siguen usando el mismo protocolo, el HTTP. Lo que cambia es la respuesta ofrecida.
+REST es un acrónimo de ***RE**epresentational **S**tate **T**ransfer*. En pocas palabras, si HTTP es transferencia de archivos, REST se basa en transferencia de recursos. Aunque ambos siguen usando el mismo protocolo, el HTTP, lo que cambia es la respuesta ofrecida.
 
 Mientras que una respuesta HTTP estándar, es texto que crea otra página web que representa el navegador, una respuesta REST tiene el formato de un archivo XML o JSON. Se usan principalmente para el intercambio de datos, de una manera ligera y legible.
 
@@ -434,7 +434,7 @@ En https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practi
    3. Hacer los 4 métodos necesarios para satisfacer las necesidades del API definidas, haciendo uso del servicio `UserService`.
 3. Comprobar que todo lo indicado en `home.html` funciona.
 
-💡Verás que haciendo uso del servicio, las acciones para interactuar con la base de datos se resumen a UNA LINEA DE CÓDIGO. Y lo mejor es que el este servicio *mock*, puede ser fácilmente sustituido por uno real que si acceda a una base de datos, sin tener que modificar prácticamente nada de nuestra aplicación.
+💡Verás que haciendo uso del servicio, las acciones para interactuar con la “base de datos” se resumen a UNA LINEA DE CÓDIGO. Y lo mejor es que este servicio *mock*, puede ser fácilmente sustituido por uno real que sí acceda a una base de datos real, dejando el código del controlador intacto.
 
 
 
