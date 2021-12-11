@@ -403,7 +403,7 @@ public class APIController {
 
 ------
 
-# Práctica 6
+## Práctica 6
 
 Hacer un proyecto Spring Boot, con un REST de usuarios funcional como el siguiente. El servicio será un mock que actuará sobre una colección.
 
@@ -436,5 +436,406 @@ En https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practi
 
 💡Verás que haciendo uso del servicio, las acciones para interactuar con la “base de datos” se resumen a UNA LINEA DE CÓDIGO. Y lo mejor es que este servicio *mock*, puede ser fácilmente sustituido por uno real que sí acceda a una base de datos real, dejando el código del controlador intacto.
 
+# Métodos de petición HTTP
 
+En la práctica anterior, no hemos borrado nada de nuestra “base de datos” falsa, a pesar de tener un método en el servicio.
+
+```java
+public interface UserService {
+	...
+    //Limpia todo el contenido de la lista de usuarios, dejándola vacía
+	public void deleteAll();
+}
+```
+
+Su implementación era simple, era limpiar el ArrayList.
+
+```java
+@Override
+public void deleteAll() {
+    this.listaUsuarios.clear();
+}
+```
+
+Podríamos haber añadido una acción más, que por ejemplo al ir a GetMapping de `/borrar/usuarios`, hacer una llamada al método del servicio y se borraba la lista completa. TODO lo hacemos con `GET`.
+
+Pero las peticiones de tipo `GET` deberían usarse sólo para recuperar datos. Veamos los métodos más comunes de HTTP y sus aplicaciones (hay más, pero mostraremos los básicos).
+
+## GET
+
+El método `GET` solicita una representación de un recurso específico. Las peticiones que usan el método `GET` sólo deben recuperar datos.
+
+```http
+GET localhost:8080/api/usuarios
+```
+
+## POST
+
+El método `POST` se utiliza para enviar una entidad a un recurso en específico. Aunque se pueda usar `GET` para enviar datos, tiene muchas limitaciones que `POST` no tiene. Su fin es más genérico, envía información para que quién la reciba haga lo que estime con ella. `POST` no es idempotente. Una nueva petición POST tendría  un efecto distinto que la primera llamada (por ejemplo, dos peticiones seguidas insertarían 2 usuarios en la base de datos).
+
+```http
+POST localhost:8080/api/usuario/user
+```
+
+El backend crearía un nuevo objeto `user` y le asignaría una id, creando el objeto `/api/usuario/123`. Por eso cada llamada puede tener efectos distintos. Otra llamada crearía otro usuario con otra id distinta, creando otro recurso `/api/usuario/124`.
+
+## PUT
+
+El modo `PUT` reemplaza todas las representaciones actuales del recurso de destino con la carga útil de la petición. Se suele usar para actualizar contenidos o bien para crear nuevos. Pone un contenido en un recurso, si no existe lo crea, y si existe lo reemplaza. `PUT` es idempotente, es decir, siempre tendrá el mismo resultado cuantas veces se realice la petición.
+
+```http
+PUT localhost:8080/api/usuario/5
+```
+
+Se actualizará el recurso indicado con la información que lleve en la petición, o se creará uno nuevo. Si repetimos la petición, se volvería a realizar, pero dejándolo en el mismo estado. No duplicaría nada.
+
+## DELETE
+
+El método `DELETE` borra un recurso en específico.
+
+```http
+DELETE localhost:8080/api/usuario/5
+```
+
+Borraría el recurso (usuario) cuya id sea 5.
+
+## PATCH
+
+El método `PATCH` es utilizado para aplicar modificaciones parciales a un recurso. A diferencia de `PUT` que lo reemplaza (o crea) completamente.
+
+```http
+PATCH localhost:8080/api/usuario/5
+```
+
+En la petición iría sólo la información que queremos modificar en el recurso. La que no se incluya se dejará como estaba.
+
+------
+
+Fuente: [Mozilla Developer. Métodos de petición HTTP](https://developer.mozilla.org/es/docs/Web/HTTP/Methods)
+
+
+
+## Usando los métodos HTTP en Spring Boot
+
+Ya hemos visto que hay más métodos/verbos en las peticiones HTTP. Veamos como se aplicarían correctamente en la práctica anterior.
+
+### @DeleteMapping
+
+Para hacer una petición que borre un recurso, en lugar de hacerlo mediante el método `GET`, lo correcto sería hacerlo con el método `DELETE`, y eso sería cambiando el método soportado en la petición a `/borrar/usuarios`
+
+```java
+@RestController
+@RequestMapping("/api")
+public class APIController {
+	@Autowired
+	UserService userService;
+	
+	@GetMapping("/usuarios")
+	public List<User> getAllUsers(){
+		return userService.getAll();
+	}
+	...	
+	@DeleteMapping("/usuarios")
+	public void deleteAllUsers() {
+		userService.deleteAll();
+	}
+}
+```
+
+Al soportar cada url métodos distintos, podemos usar las mismas url, facilitando la escalabilidad del api. 
+
+Lo único que ahora para probar el método `.deleteAllUsers()` no podremos ir a la url `/api/usuarios` desde el navegador, ya que si no estaremos haciendo una petición de tipo `GET`, y ejecutaremos `.getAllUsers()`. 
+
+La url será la misma, pero dependiendo del tipo de petición que hagamos, hará una cosa u otra. Para poder probar esto, podemos usar una aplicación tipo [postman](https://www.postman.com/downloads/) o extensiones del navegador.
+
+Podemos ver que al hacer la petición de tipo `GET` a `/api/usuarios`, obtenemos como respuesta el JSON con todos los usuarios.
+
+![Postman1](img/04/03.png)
+
+Sin embargo si hacemos una petición `DELETE` a la misma url, obtenemos lo siguiente:
+
+![Postman2](img/04/04.png)
+
+No obtenemos cuerpo de respuesta, pero nos devolvió un código 200. Eso significa que no hubo errores. Se procesó la petición bien y nos dirigió al método correcto que borró la “base de datos” de usuarios.
+
+Si repetimos la petición `GET` a `/api/usuarios` para asegurarnos, obtendremos lo siguiente:
+
+![Postman3](img/04/05.png)
+
+Si decidimos crear un nuevo método al servicio para borrar UN usuario concreto, haríamos lo siguiente:
+
+Añadimos el método al servicio `UserService`.
+
+```java
+public interface UserService {
+	...
+	//Borra el usuario cuya id sea igual a la recibida, devolviendo el User si lo borró, o null si no se encontró
+	public User deleteById(int id);
+	
+}
+```
+
+Lo implementamos en `UserServiceImpl`.
+
+```java
+@Service
+public class UserServiceImpl implements UserService {
+	...
+        
+	@Override
+	public User deleteById(int id) {
+		User userBorrado = null;
+		for (User u: this.listaUsuarios) {
+			if (u.getId() == id) {
+				userBorrado = u;
+				listaUsuarios.remove(u);
+			}
+		}
+		return userBorrado;
+	}
+}
+```
+
+Añadimos el método al `APIController`, usando el servicio anterior.
+
+```java
+@RestController
+@RequestMapping("/api")
+public class APIController {
+	...
+	
+	@DeleteMapping("usuario/{id}")
+	public void deleteUserById(@PathVariable Integer id) {
+		userService.deleteById(id);
+	}
+}
+```
+
+Si tenemos 3 usuarios en nuestra “base de datos”, y hacemos la siguiente petición, obtendremos la siguiente respuesta, respectivamente:
+
+```http
+GET localhost:8080/api/usuarios
+```
+
+```json
+[
+    {
+        "id": 2114061879,
+        "email": "prueba1@correo.com",
+        "password": "7e5ddfb1"
+    },
+    {
+        "id": 1610394191,
+        "email": "prueba2@correo.com",
+        "password": "4e31045"
+    },
+    {
+        "id": 295829159,
+        "email": "prueba3@correo.com",
+        "password": "64857c0"
+    }
+]
+```
+
+Comprobamos que ahí está la base de datos completa. Hacemos nueva petición y respuesta.
+
+````http
+GET localhost:8080/api/usuario/id/1610394191
+````
+
+```json
+{
+    "id": 1610394191,
+    "email": "prueba2@correo.com",
+    "password": "4e31045"
+}
+```
+
+Y si en lugar de `GET`, usamos `DELETE`, se borrará ese usuario, en lugar de obtener su JSON.
+
+```http
+DELETE localhost:8080/api/usuario/id/1610394191
+```
+
+Comprobamos de nuevo la lista completa y obtenemos la respuesta:
+
+```http
+GET localhost:8080/api/usuarios
+```
+
+```json
+[
+    {
+        "id": 2114061879,
+        "email": "prueba1@correo.com",
+        "password": "7e5ddfb1"
+    },
+    {
+        "id": 295829159,
+        "email": "prueba3@correo.com",
+        "password": "64857c0"
+    }
+]
+```
+
+El usuario cuya id era `1610394191` fue borrado de la base de datos, usando su correspondiente `DELETE` como método HTTP, en lugar de `GET`.
+
+### @PostMapping
+
+Para borrar hemos visto que se puede o bien no recibir nada (si lo quiero borrar todo) o bien se puede recibir por @PathVariable la id del recurso a borrar. Pero para crear un nuevo recurso, ¿como podría enviar un objeto a través de la petición para que el controlador lo recoja y lo guarde en la base de datos?
+
+Esto ahora mismo sabríamos hacerlo. Podríamos:
+
+- Añadiendo en la petición `GET` los parámetros en la misma url. Ej: `/crear/usuario?id=5&email=nuevo@test.com&pass=12345`. Esto es muy engorroso, seguridad nula, y para objetos complejos sería prácticamente inviable.
+
+- Con un formulario, por `GET` o `POST`, y recogiendo los parámetros con `@RequestParam` por separado en variables (`id`, `email` y `pass` siguiendo nuestro ejemplo), creando un nuevo objeto de la clase `User`, pasándole esas variables al constructor. Casi los mismos problemas que en la opción anterior.
+
+**Una mejor solución es enviar el objeto en JSON por la petición** `POST` o `PUT`, y en Spring Boot hará el trabajo de convertir ese JSON a un Objeto Java directamente. 
+
+Si cuando convertimos de Objeto a JSON para la respuesta, usamos la anotación `@ResponseBody`, ahora que estamos haciendo justo lo contrario, convertir JSON de la petición en un Objeto, la anotación que usaremos será **`@RequestBody`**.
+
+En nuestro RestController `APIController`, le añadimos el siguiente método:
+
+```java
+@RestController
+@RequestMapping("/api")
+public class APIController {
+	...
+	@PostMapping("/usuario")
+	public User nuevoUsuario(@RequestBody User usuarioNuevo) {
+		userService.add(usuarioNuevo);
+		return usuarioNuevo;
+	}
+}
+```
+
+Y si con *postman* hacemos la petición de tipo `POST` y en el *body* le indicamos *raw* y escribimos directamente el JSON, la url `/api/usuario` recibirá el JSON indicado y gracias al `@RequestBody`, Spring lo convertirá a un objeto `User` y gracias al servicio lo insertaremos en la “base de datos”. La petición nos devolverá el objeto que ha sido guardado.
+
+![postman-nuevousuario](img/04/06.png)
+
+Y ahora comprobamos que el usuario ha sido guardado correctamente.
+
+```http
+GET localhost:8080/api/usuarios
+```
+
+```json
+[
+    {
+        "id": 2114061879,
+        "email": "prueba1@correo.com",
+        "password": "7e5ddfb1"
+    },
+    {
+        "id": 295829159,
+        "email": "prueba3@correo.com",
+        "password": "64857c0"
+    },
+    {
+    	"id": 12345,
+	    "email": "nuevoemail@test.com",
+	    "password": "123ABC"
+	}
+]
+```
+
+
+
+### @PutMapping
+
+Con todo lo que hemos visto anteriormente, ya sabemos que para actualizar un elemento concreto entero (o crear) usaremos `PUT`. 
+
+Definimos el método en la interfaz y lo implementaremos: 
+
+```java
+public interface UserService {
+	...
+	public User updateUser(User nuevo, int id);    
+}
+```
+
+```java
+@Service
+public class UserServiceImpl implements UserService {
+	...
+	@Override
+	public User updateUser(User nuevo, int id) {
+		User actualizado = null;
+		for (User u: this.listaUsuarios) {
+			if (u.getId() == id) {
+				u.setEmail(nuevo.getEmail());
+				u.setPassword(nuevo.getPassword());
+				actualizado = u;
+			}
+		}
+		return actualizado;
+	}
+}
+```
+
+Añadimos el método al `APIController`, usando el servicio anterior.
+
+```java
+@RestController
+@RequestMapping("/api")
+public class APIController {
+	...
+	
+	@PutMapping("/usuario/{id}")
+	public User updateUser(
+			@PathVariable Integer id,
+			@RequestBody User userUpdated
+			) {
+		return userService.updateUser(userUpdated, id);
+	}
+}
+```
+
+Y haciendo la siguiente petición `PUT`, tendremos la respuesta (suponiendo que existe un usuario cuya id es `1545713824`):
+
+```http
+PUT /api/usuario/1545713824 HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+    "id": 1545713824,
+    "email": "pruebados@correonuevo.com",
+    "password": "12345Laclavequepondríaunestúpidoensusmaletas"
+}
+```
+
+```json
+{
+    "id": 1545713824,
+    "email": "pruebados@correonuevo.com",
+    "password": "12345Laclavequepondríaunestúpidoensusmaletas"
+}
+```
+
+### @PatchMapping
+
+Sería exactamente igual que `PUT` pero con la diferencia de que podemos omitir los campos que no queremos que se modifiquen. Por ejemplo si sólo queremos modificar el email, pues en la petición sólo pondríamos:
+
+```json
+{
+    "email": "pruebados@correonuevo.com",
+}
+```
+
+Y el resto de atributos quedarían tal y como estaban.
+
+
+
+# Conclusión
+
+Usando los métodos adecuados de HTTP para las peticiones podemos conseguir que nuestros frontend y backend se comuniquen mediante objetos JSON, de forma bidireccional. Así nos aseguramos que uno no dependa del otro y que trabajen de forma independiente. 
+
+El equipo de desarrollo de frontend puede usar un backend mock ( https://my-json-server.typicode.com, https://www.mockable.io, https://get.mocklab.io) y viceversa con Postman por ejemplo. 
+
+Cuando ambos funcionen y ya estén funcionales y testeados, podrán integrarse fácilmente cambiando uno por otro y todo funcionará perfectamente a la primera 🤞.
+
+
+
+![Tamariz](img/04/07.gif)
 
