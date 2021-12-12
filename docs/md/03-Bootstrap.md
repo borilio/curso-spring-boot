@@ -60,8 +60,6 @@ Esto no es exclusivamente para añadir Bootstrap, podemos usarlo para menús de 
 
 Lo veremos en el siguiente apartado para diferenciarlo de Bootstrap, ya que es algo general de las plantillas Thymeleaf, aunque podemos usarlo también para incluir Bootstrap en nuestras plantillas.
 
-
-
 # Fragmentos
 
 ## Creación de fragmentos con `th:fragments`
@@ -137,9 +135,9 @@ La sintaxis sería la siguiente:
 <etiqueta th:replace="ruta/archivo :: nombre-fragment"></etiqueta>
 ```
 
-Con **`th:insert`** se **inserta** el fragmento llamado `nombre-fragment`, ubicado en la carpeta `/ruta` con el nombre de `archivo.html`. Se insertaría el fragmento DENTRO del contenido de <etiqueta>, eliminado su contenido original.
+Con **`th:insert`** se **inserta** el fragmento llamado `nombre-fragment`, ubicado en la carpeta `/ruta` con el nombre de `archivo.html`. Se insertaría el fragmento DENTRO del contenido de `<etiqueta>`, eliminado su contenido original.
 
-Con **`th:replace`**, **reemplaza** la <etiqueta> y su contenido, por el fragmento llamado `nombre-fragment`, ubicado en la carpeta `/ruta` con el nombre de `archivo.html`. Se borraría el contenido original de <etiqueta>.
+Con **`th:replace`**, **reemplaza** la `<etiqueta>` y su contenido, por el fragmento llamado `nombre-fragment`, ubicado en la carpeta `/ruta` con el nombre de `archivo.html`. Se borraría el contenido original de `<etiqueta>`.
 
 Por ejemplo, veamos como insertar el fragmento definido anteriormente como `pie-pagina` en una página. El fragmento puede haber sido definido de cualquiera de las formas que hemos visto antes. El archivo externo lo hemos ubicado en `/fragmentos/pie.html`. Y su definición era `pie-pagina`.
 
@@ -147,9 +145,9 @@ Por ejemplo, veamos como insertar el fragmento definido anteriormente como `pie-
 <footer th:replace="fragmentos/pie :: pie-pagina"></footer>
 ```
 
-De estar forma, un <footer> sería reemplazado por el otro situado en el archivo externo, definido previamente como un fragmento.
+De estar forma, un `<footer>` sería reemplazado por el otro situado en el archivo externo, definido previamente como un fragmento.
 
-Si quisiéramos incluir un <link> de bootstrap en la etiqueta <head> podríamos usar el `th:insert`.
+Si quisiéramos incluir un `<link>` de bootstrap en la etiqueta `<head>` podríamos usar el `th:insert`.
 
 **Definimos el fragmento primero**, en un archivo llamado `/fragmentos/link-bootstrap.html`.
 
@@ -173,7 +171,7 @@ Si quisiéramos incluir un <link> de bootstrap en la etiqueta <head> podríamos 
 </html>
 ```
 
-> **MUY IMPORTANTE:** Al user `th:insert`, estaríamos eliminando TODO lo que ya hubiera en la etiqueta <head>, por lo que se borrarían el <title> y el <meta>. En este caso, **sería recomendable** usar `th:replace` en su lugar. Con `<link th:replace="fragmentos/link-bootstrap :: bootstrap"/>`, o bien hacer un fragment con todo el <head> completo.
+> **MUY IMPORTANTE:** Al user `th:insert`, estaríamos eliminando TODO lo que ya hubiera en la etiqueta `<head>`, por lo que se borrarían el `<title>` y el `<meta>`. En este caso, **sería recomendable** usar `th:replace` en su lugar. Con `<link th:replace="fragmentos/link-bootstrap :: bootstrap"/>`, o bien hacer un fragment con todo el `<head>` completo.
 
 ## Paso de parámetros a los fragments
 
