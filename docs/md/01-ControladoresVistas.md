@@ -243,7 +243,7 @@ Se pueden hacer estructuras condicionales con el atributo `th:if`.
 <div th:if="${user.esAdmin()}">Panel de administrador</div>
 ```
 
-Al compilar la plantilla, INCLUIRÁ el elemento sólo si la expresión indicada es `true`. En caso contrario no se incluirá elemento <div> en el HTML de respuesta. La vista quedaría así en caso de ser la expresión verdadera.
+Al compilar la plantilla, INCLUIRÁ el elemento sólo si la expresión indicada es `true`. En caso contrario no se incluirá elemento `<div>` en el HTML de respuesta. La vista quedaría así en caso de ser la expresión verdadera.
 
 ```html
 <div>Panel de administrador</div>
@@ -344,7 +344,7 @@ public String pruebaArrayList(Model model) {
 
     model.addAttribute("lista", listaArticulos);
 
-    return "home";
+    return "ticket";
 }
 ```
 
@@ -363,7 +363,7 @@ En la vista:
         <td th:text="${articulo.cantidad}"></td>
         <td th:text="${articulo.descripcion}"></td>
         <td th:text="${articulo.precio}"></td>
-        <th th:text="${articulo.cantidad * articulo.precio + ' €'}"></th>
+        <th th:text="${articulo.cantidad * articulo.precio + '€'}"></th>
     </tr>
 </table>
 ```

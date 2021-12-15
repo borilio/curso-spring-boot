@@ -107,7 +107,7 @@ Veamos otro ejemplo para verlo en otro contexto.
 
 ```java
 @RequestMapping(value = "borrar", method = RequestMethod.GET)
-public String borrar(@RequestParam(name="id", required=false) Integer identificacion){
+public String borrar(@RequestParam Integer identificacion){
     //Vamos a borrar un usuario por id recibida
     BaseDatos db = new BaseDatos();
     if (identificacion!=null) { //si no es null...
@@ -175,7 +175,7 @@ public String borrar (@PathVariable Integer id)
 
 //No coinciden (idEmpleado -> id), así que indicamos identificadores
 @GetMapping("borrar/{idEmpleado}")
-public String borrar(@PathVariable(idEmpleado) Integer id) 
+public String borrar(@PathVariable("idEmpleado") Integer id) 
 ```
 
 
@@ -270,7 +270,7 @@ public String validar(HttpSession session){
     User usuario = new User(1, "Gregorio", "12345");
     if (esValido(usuario)) {
         session.setAttribute("usuarioActivo", usuario);
-        return "validar";
+        return "home";
     } else {
         return "login"
     }
@@ -279,7 +279,7 @@ public String validar(HttpSession session){
 @GetMapping("/usuario/logout")
 public String logout(HttpSession session) {
     session.invalidate();
-    return "validar";
+    return "login";
 }
 ```
 
@@ -353,7 +353,7 @@ Hacer una aplicación en Spring Boot que simule una autentificación de usuario.
 - `/usuarios/validar` -> Extraemos los valores de la petición. Creamos un objeto `User` con los valores extraídos, y:
   - Si son válidos (que el password sea ‘12345’) tenemos que ir a `home.html`, pero insertando el usuario ya validado en la sesión.
   - Si no es válido tendremos que volver a `login.html`, enviando un mensaje de “Usuario y/o contraseña no válidos” para la vista.
-  - Para comprobar si un usuario es válido o no, podemos comprobarlo manualmente, o bien usando la clase `UserService`, que tiene un métod
+  - Para comprobar si un usuario es válido o no, podemos comprobarlo manualmente, o bien usando la clase `UserService`, que tiene un método {{FIX comprobar esto}}
 - `/usuarios/logout` -> Invalidaremos la sesión actual, y nos vamos a `login.html`. Usaremos esta url en la opción del menú principal “Cerrar sesión”.
 - `/` -> Inicialmente íbamos directos a `login.html`. Ahora tendremos que comprobar primero:
   - Si hay un usuario en la sesión, en ese caso vamos a `home.html` (si existe el usuario en la sesión, ya está validado, por lo que no hay que comprobar nada más).
@@ -363,7 +363,7 @@ Si cerramos el navegador y volvemos a entrar en la app, mientras siga la sesión
 
 Si todo va bien, no habrá posibilidad de ir a la página principal sin iniciar sesión validando al usuario primero.
 
-—
+
 
 ## Application Scope
 

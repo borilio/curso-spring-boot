@@ -12,7 +12,7 @@
 
 Aunque para las vistas usemos Thymeleaf, no dejan de ser archivos HTML , con las mismas etiquetas y atributos, por lo que podemos incluir Bootstrap de forma manual en cada archivo HTML como lo haríamos en cualquier proyecto web que use HTML.
 
-Podemos usar cualquiera de los procedimientos indicados en su página web oficial [getbootstrap.com](https://getbootstrap.com). La manera más fácil es añadir los enlaces a los CDN externos dentro de la etiqueta <head> para el css, y al final del <body> para el JavaScript.
+Podemos usar cualquiera de los procedimientos indicados en su página web oficial [getbootstrap.com](https://getbootstrap.com). La manera más fácil es añadir los enlaces a los CDN externos dentro de la etiqueta `<head>` para el css, y al final del `<body>` para el JavaScript.
 
 ## Usando CDN
 
@@ -54,7 +54,7 @@ También puede ser útil cuando la tipología de la aplicación no nos permita e
 
 ## Usando Thymeleaf
 
-También podemos extraer el trozo de página HTML y repetirlo cuantas veces queramos. Esto es muy útil para tener una única etiqueta <link> con la versión que queramos usar en nuestra aplicación e insertarla en todas las páginas de nuestra aplicación. Si actualizamos Bootstrap (o cualquier otra librería) sólo tendríamos que hacerlo en un archivo, el cual se insertaría (o reemplazaría) en la ubicación que deseemos.
+También podemos extraer el trozo de página HTML y repetirlo cuantas veces queramos. Esto es muy útil para tener una única etiqueta `<link>` con la versión que queramos usar en nuestra aplicación e insertarla en todas las páginas de nuestra aplicación. Si actualizamos Bootstrap (o cualquier otra librería) sólo tendríamos que hacerlo en un archivo, el cual se insertaría (o reemplazaría) en la ubicación que deseemos.
 
 Esto no es exclusivamente para añadir Bootstrap, podemos usarlo para menús de navegación, cabeceras, pie de páginas, secciones que se repitan, etc. 
 
