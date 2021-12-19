@@ -171,7 +171,7 @@ Si quisiéramos incluir un `<link>` de bootstrap en la etiqueta `<head>` podría
 </html>
 ```
 
-> **MUY IMPORTANTE:** Al user `th:insert`, estaríamos eliminando TODO lo que ya hubiera en la etiqueta `<head>`, por lo que se borrarían el `<title>` y el `<meta>`. En este caso, **sería recomendable** usar `th:replace` en su lugar. Con `<link th:replace="fragmentos/link-bootstrap :: bootstrap"/>`, o bien hacer un fragment con todo el `<head>` completo.
+> **MUY IMPORTANTE:** Al usar `th:insert`, estaríamos eliminando TODO lo que ya hubiera en la etiqueta `<head>`, por lo que se borrarían el `<title>` y el `<meta>`. En este caso, **sería recomendable** usar `th:replace` en su lugar. Con `<link th:replace="fragmentos/link-bootstrap :: bootstrap"/>`, o bien hacer un fragment con todo el `<head>` completo.
 
 ## Paso de parámetros a los fragments
 
