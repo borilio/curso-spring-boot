@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<title>CRUD</title>
+	
+	<!-- Bootstrap 5 & Icons  -->
+	<link th:replace="fragments/bootstrap :: bootstrap-css" />	
+	<link th:replace="fragments/bootstrap :: bootstrap-icon" />
+	
+	<link rel="stylesheet" th:href="@{/css/estilos.css}" />	
+</head>
+<body>
+
+
+	<header th:replace="fragments/header :: header('Login')" ></header>
+	
+	<form th:action="@{/login/usuario}" method="post" class="m-5">
+		<div class="row">
+			<div class="col"></div>
+				
+			<div class="col d-grid gap-3 card p-4 shadow">
+				<h5 class="card-title">Introduzca sus credenciales</h5>
+				<input name="email" class="form-control" type="text" placeholder="Correo electrónico" /> 
+				<input name="pass" class="form-control" type="password" placeholder="Contraseña" />
+				<button class="btn btn-primary">Entrar <i class="bi bi-box-arrow-in-right"></i></button>
+				
+				<!-- Si hay un mensaje que mostrar, se muestra -->
+				<div th:if="${mensajeAuth}">
+					<div th:replace="fragments/mensaje :: mensaje( ${mensajeAuth}, 'danger', 'lock-fill')"></div>
+				</div>
+				
+				<!-- Si hay un mensaje de despedida, se muestra -->
+				<div th:if="${mensajeLogout}">
+					<div th:replace="fragments/mensaje :: mensaje( ${mensajeLogout}, 'info', 'info-circle-fill')"></div>
+				</div>
+				
+			</div>
+			
+			
+			<div class="col"></div>
+		</div>
+	</form>
+	
+	<footer th:replace="fragments/footer :: footer"></footer>
+
+
+	<!-- Scripts JS-->
+	<script th:replace="fragments/bootstrap :: bootstrap-js"></script>
+</body>
+</html>

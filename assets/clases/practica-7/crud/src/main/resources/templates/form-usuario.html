@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<title>CRUD</title>
+
+	<!-- Bootstrap 5 & Icons  -->
+	<link th:replace="fragments/bootstrap :: bootstrap-css" />
+	<link th:replace="fragments/bootstrap :: bootstrap-icon" />
+
+	<link rel="stylesheet" th:href="@{/css/estilos.css}" />
+</head>
+<body>
+
+	<header th:replace="fragments/header :: header('Formulario Usuario')"></header>
+
+	<div class="container">
+		<div class="row">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col shadow">
+				<div class="m-0">
+					<div id="perfil" class="text-end">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">
+								<i class="bi bi-person-circle float-start"></i>
+								<span><strong>[[${session.usuario.name}]]</strong></span> 
+								<span class="small">[[${session.usuario.email}]]</span>
+							</li>
+							<li class="list-group-item">
+								<span>[[${#session.id}]]</span>
+							</li>
+							<li class="list-group-item">
+								<a class="btn btn-outline-dark btn-sm" href="/usuario/logout">Cerrar sesión</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col"></div>
+
+			<div class="col-8 d-grid gap-3 p-4">
+				<div class="card shadow">
+					<h4 class="card-title p-3">
+						<a href="/" class="btn btn-outline-secondary btn-lg rounded-circle"><i class="bi bi-arrow-left"></i></a>
+						<span>[[${modo}]] usuario</span>
+					</h4>
+					
+					<div class="card-body">
+						<div class="mx-5">
+							<form action="/usuario/guardar" method="post" autocomplete="off">
+								<!-- Primero enviamos la id oculta, si no hay es porque es para crear uno nuevo y enviamos 0 -->
+								<div>
+									<input type="hidden" name="id" th:value="${usuarioModificar!=null ? usuarioModificar.id : 0}" />
+								</div>
+								<div class="form-floating mb-3">
+									<input name="email" th:value="${usuarioModificar!=null ? usuarioModificar.email : ''}" type="email" class="form-control" id="floatingEmail" placeholder="ejemplo@empresa.com" />
+									<label for="floatingEmail">Dirección de correo</label>
+								</div>
+								<div class="form-floating mb-3">
+									<input name="pass" th:value="${usuarioModificar!=null ? usuarioModificar.pass : ''}" type="password" class="form-control" id="floatingPass" placeholder="Contraseña" />
+									<label for="floatingPass">Contraseña</label>
+								</div>
+								<div class="form-floating mb-3">
+									<input name="name" th:value="${usuarioModificar!=null ? usuarioModificar.name : ''}" type="text" class="form-control" id="floatingNombre" placeholder="Nombre completo" />
+									<label for="floatingNombre">Nombre completo</label>
+								</div>
+								<div class="form-check form-switch mb-3">
+									<input name="admin" value="true" th:if="${usuarioModificar != null}" th:checked="${usuarioModificar.admin}" type="checkbox" class="form-check-input" role="switch" id="admin" />
+									<input name="admin" value="true" th:if="${usuarioModificar == null}" type="checkbox" class="form-check-input" role="switch" id="admin" />
+									<label class="form-check-label" for="admin">Administrador</label>
+								</div>
+
+								<button type="submit" class="btn btn-primary float-end">Guardar</button>
+							</form>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+
+			<div class="col"></div>
+		</div>
+
+
+	</div>
+
+	<!-- Para separarlo del footer -->
+	<div class="mt-5"> </div>
+	
+	<footer th:replace="fragments/footer :: footer"></footer>
+
+
+	<!-- Scripts JS-->
+	<script th:replace="fragments/bootstrap :: bootstrap-js"></script>
+</body>
+</html>

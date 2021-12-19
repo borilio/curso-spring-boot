@@ -1,0 +1,26 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+
+
+DROP DATABASE IF EXISTS crud_usuarios;
+CREATE DATABASE IF NOT EXISTS crud_usuarios DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci;
+USE crud_usuarios;
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE usuarios (
+	id int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name varchar(50) NOT NULL DEFAULT '',
+	email varchar(50) NOT NULL UNIQUE,
+	pass varchar(50) NOT NULL DEFAULT '',
+	admin bit(1) DEFAULT b'0' NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

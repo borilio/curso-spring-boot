@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<title>CRUD</title>
+
+	<!-- Bootstrap 5 & Icons  -->
+	<link th:replace="fragments/bootstrap :: bootstrap-css" />
+	<link th:replace="fragments/bootstrap :: bootstrap-icon" />
+
+	<link rel="stylesheet" th:href="@{/css/estilos.css}" />
+</head>
+<body>
+
+	<header th:replace="fragments/header :: header('Login')"></header>
+
+	<div class="container">
+		<div class="row">
+			<div class="col"></div>
+			<div class="col"></div>
+			<div class="col shadow">
+				<div class="m-0">
+					<div id="perfil" class="text-end">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">
+								<i class="bi bi-person-circle float-start"></i>
+								<span><strong>[[${session.usuario.name}]]</strong></span> 
+								<span class="small">[[${session.usuario.email}]]</span>
+							</li>
+							<li class="list-group-item">
+								<span>[[${#session.id}]]</span>
+							</li>
+							<li class="list-group-item">
+								<a class="btn btn-outline-dark btn-sm" href="/usuario/logout">Cerrar sesión</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col"></div>
+
+			<div class="col-8 d-grid gap-3 p-4">
+				<div class="card shadow">
+					<h4 class="card-title p-3">
+						<span>Listado de usuarios</span>
+						<a th:if="${session.usuario.admin}" th:href="@{/usuario/nuevo}" class="btn btn-primary float-end"><i class="bi bi-person-plus"></i> Nuevo usuario</a>
+					</h4>
+					
+					<div th:if="${mensajeBorrado}" class="text-center mx-4">
+						<div th:replace="fragments/mensaje :: mensaje( ${mensajeBorrado}, 'success', 'check-circle-fill')"></div>			
+					</div>
+					
+					<div class="card-body">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Email</th>
+									<th>Nombre</th>
+									<th>Rol</th>
+									<th>Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="usuario : ${lista}">
+									<td>[[${usuario.id}]]</td>
+									<td>[[${usuario.email}]]</td>
+									<td>[[${usuario.name}]]</td>
+									<td>
+										<i th:if="${usuario.admin}" class="bi bi-gear"></i>
+										<i th:if="${!usuario.admin}" class="bi bi-person"></i>
+									</td>
+									<td>
+										<div id="all" class="float-start me-1">
+											<a class="btn btn-secondary btn-sm rounded-circle" th:href="@{'/usuario/ficha/' + ${usuario.id}}"><i class="bi bi-zoom-in"></i></a>
+										</div>
+										<div id="admin" class="float-start" th:if="${session.usuario.admin}">
+											<a class="btn btn-info btn-sm rounded-circle" th:href="@{|/usuario/editar/${usuario.id}|}"><i class="bi bi-pen"></i></a>
+											<a class="btn btn-danger btn-sm rounded-circle" th:href="@{|/usuario/borrar/${usuario.id}|}"><i class="bi bi-trash"></i></a>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+				</div>
+			</div>
+
+			<div class="col"></div>
+		</div>
+
+
+	</div>
+
+	<!-- Para separarlo del footer -->
+	<div class="mt-5"> </div>
+	
+	<footer th:replace="fragments/footer :: footer"></footer>
+
+
+	<!-- Scripts JS-->
+	<script th:replace="fragments/bootstrap :: bootstrap-js"></script>
+</body>
+</html>
