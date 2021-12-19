@@ -529,7 +529,7 @@ Y añadimos unos cuantos usuarios más, y así se vería finalmente.
 
 > ⚠**Atención:** Ten en cuenta que después de añadir usuarios, el controlador, nos lleva a `index.html`, pero SIN PASAR por el método que recupera los valores de la tabla y los coloca en el `model`. Por lo que la tabla saldrá vacía. Si en el método `creaUsuario()`, cambiamos el `return "index"` por `return "redirect:/"`, en lugar de llevarnos a la vista, nos REDIRECCIONARÁ a la url `/`, lo cual nos llevará al método `index()` que cargará los datos y nos llevará a `index.html`, pero ahora si, con los datos cargados en el model. Y si veremos que al crear un usuario nuevo, se refleja en la tabla.
 
-Otro métodos útil para recuperar datos según una id:
+Otro método útil para recuperar datos según una id:
 
 - `.findById()` -> El cual recibirá una id y devolverá UN objeto (ambos del mismo tipo definido en el repositorio, respectivamente). En nuestro ejemplo, recibirá un `Integer` y devolverá un `User`.
 
@@ -784,9 +784,83 @@ Y una petición a `localhost:8080/usuarios/5` obtendremos la siguiente respuesta
 }
 ```
 
+## Personalizar la url base
+
+Podemos añadir una ruta url base para todo el rest, añadiendo la siguiente configuración en el `application.properties`:
+
+```properties
+spring.data.rest.basePath=/api/v1
+```
+
+Así para usar las rutas anteriores, deberíamos ir a `localhost:8080/api/v1/usuarios`. Así tendríamos por un lado el acceso al api rest en una ruta, y nuestros controladores por otra.
+
+## Acepta peticiones de otros verbos
+
+El API Rest que “hemos montado 😉😉”, no sólo nos devolverá en formato JSON los objetos que exista en la base de datos, también aceptará peticiones POST, PUT, DELETE, PATCH, etc. 
+
+Veamos como desde postman acepta una petición `POST`, y lo inserta en la base de datos.
+
+![Petición Post](img/05/14.png)
+
+```
+MariaDB [crud_usuarios]> select * from usuarios;
++----+----------------+----------------------------+--------+-------+
+| id | name           | email                      | pass   | admin |
++----+----------------+----------------------------+--------+-------+
+|  1 | Administrador  | admin@empresa.com          | 654321 | ☺     |
+|  2 | Usuario        | user@empresa.com           | 123456 |       |
+|  3 | Visor          | visor@empresa.com          | 123456 |       |
+|  4 | Max Power      | max.power@empresa.com      | 123456 |       |
+|  5 | Bruno Díaz     | bruce.wayne@empresa.com    | 123456 |       |
+|  6 | Enrico Palazzo | enricco.palazo@empresa.com | 123456 |       |
+|  7 | Ricardo Tapia  | ri.cardo@empresa.com       | 123456 |       |
+|  9 | New Muchachit@ | muchachit@empresa.com      | 654321 | ☺     |
++----+----------------+----------------------------+--------+-------+
+8 rows in set (0.000 sec)
+```
+
+Y como acepta una petición `DELETE` y lo borra sin problemas.
+
+![](img/05/15.png)
+
+## Búsquedas personalizadas
+
+Si vamos a `localhost:8080/api/v1/usuarios/search` nos mostrará todos los métodos personalizados que hayamos definido en nuestro repositorio, pudiendo usarlos también desde el API REST:
+
+```json
+{
+  "_links" : {
+    "findByEmailAndPass" : {
+      "href" : "http://localhost:8080/api/v1/usuarios/search/findByEmailAndPass{?email,pass}",
+      "templated" : true
+    },
+    "self" : {
+      "href" : "http://localhost:8080/api/v1/usuarios/search/"
+    }
+  }
+}
+```
+
+`localhost:8080/api/v1/usuarios/search/findByEmailAndPass?email=ri.cardo@empresa.com&pass=123456`
+
+```json
+{
+  "name" : "Ricardo Tapia",
+  "email" : "ri.cardo@empresa.com",
+  "pass" : "123456",
+  "admin" : false,
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/api/v1/usuarios/7"
+    },
+    "usuario" : {
+      "href" : "http://localhost:8080/api/v1/usuarios/7"
+    }
+  }
+}
+```
 
 
-{{ Pendiente de ampliar }}
 
 # CRUD Completo
 
@@ -795,9 +869,46 @@ Veamos una aplicación final, usando todo lo visto durante el curso.
 1. Haremos un login, el cual tendremos que autentificarnos con un usuario y contraseña que deberá estar registrado en la base de datos.
 2. Una vez hagamos login, guardará el usuario en la sesión y mientras no se cierre, iremos directamente a la página principal.
 3. En la página principal habrá un listado de una tabla de una base de datos, en el cual podremos añadir nuevos registros, modificar su contenido y borrarlos.
-4. Podremos cerrar sesión, de forma que nos llevará de nuevo al login.
+4. Opcionalmente, podemos restringir las opciones de añadir, borrar y editar sólo para usuarios con rol de administrador.
+5. Podremos cerrar sesión, de forma que nos llevará de nuevo al login.
 
+Encontrarás la vistas y las estructuras incompletas de algunas clases y servicios en el repositorio siguiente:  
 
+> https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-7 
 
-{{ Pendiente de añadir }}
+En la carpeta `/resources/sql` del repositorio de GIT encontrarás los scripts SQL necesarios para crear el esquema (`squema.sql`) y los datos (`data.sql`).
+
+## Vista previa
+
+Login inicial:
+
+![Login](img/05/05.png)
+
+Menú principal:
+
+![Menú](img/05/06.png)
+
+Nuevo usuario:
+
+![Nuevo usuario](img/05/08.png)
+
+Comprobación de nuevo usuario creado:
+
+![Nuevo usuario](img/05/09.png)
+
+Editamos ese nuevo usuario (nos volcará la información en el formulario):
+
+![Nuevo usuario](img/05/10.png)
+
+Comprobamos la actualización de sus datos:
+
+![Nuevo usuario](img/05/11.png)
+
+Borramos el usuario nuevo:
+
+![Nuevo usuario](img/05/12.png)
+
+Cerramos sesión:
+
+![Nuevo usuario](img/05/13.png)
 
