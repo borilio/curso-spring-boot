@@ -604,7 +604,7 @@ Añadimos el método al `APIController`, usando el servicio anterior.
 public class APIController {
 	...
 	
-	@DeleteMapping("usuario/{id}")
+	@DeleteMapping("/usuario/{id}")
 	public void deleteUserById(@PathVariable Integer id) {
 		userService.deleteById(id);
 	}
@@ -682,7 +682,7 @@ El usuario cuya id era `1610394191` fue borrado de la base de datos, usando su c
 
 ### @PostMapping
 
-Para borrar hemos visto que se puede o bien no recibir nada (si lo quiero borrar todo) o bien se puede recibir por @PathVariable la id del recurso a borrar. Pero para crear un nuevo recurso, ¿como podría enviar un objeto a través de la petición para que el controlador lo recoja y lo guarde en la base de datos?
+Para borrar hemos visto que se puede o bien no recibir nada (si lo quiero borrar todo) o bien se puede recibir por `@PathVariable` la id del recurso a borrar. Pero para crear un nuevo recurso, ¿como podría enviar un objeto a través de la petición para que el controlador lo recoja y lo guarde en la base de datos?
 
 Esto ahora mismo sabríamos hacerlo. Podríamos:
 
@@ -703,8 +703,7 @@ public class APIController {
 	...
 	@PostMapping("/usuario")
 	public User nuevoUsuario(@RequestBody User usuarioNuevo) {
-		userService.add(usuarioNuevo);
-		return usuarioNuevo;
+        return userService.add(usuarioNuevo);
 	}
 }
 ```
@@ -819,7 +818,7 @@ Sería exactamente igual que `PUT` pero con la diferencia de que podemos omitir 
 
 ```json
 {
-    "email": "pruebados@correonuevo.com",
+    "email": "pruebados@correonuevo.com"
 }
 ```
 
@@ -829,7 +828,7 @@ Y el resto de atributos quedarían tal y como estaban.
 
 # Conclusión
 
-Usando los métodos adecuados de HTTP para las peticiones podemos conseguir que nuestros frontend y backend se comuniquen mediante objetos JSON, de forma bidireccional. Así nos aseguramos que uno no dependa del otro y que trabajen de forma independiente. 
+Usando los métodos adecuados de HTTP para las peticiones podemos conseguir que nuestros frontend y backend se comuniquen mediante objetos JSON, de forma bidireccional. **Así nos aseguramos que uno no dependa del otro** y que trabajen de forma independiente. 
 
 El equipo de desarrollo de frontend puede usar un backend mock ( https://my-json-server.typicode.com, https://www.mockable.io, https://get.mocklab.io) y viceversa con Postman por ejemplo. 
 

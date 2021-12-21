@@ -25,7 +25,7 @@ Veremos cómo integrar la persistencia JPA en un proyecto Spring Boot para simpl
 Antes de crear el proyecto con Spring Data, tendremos que tener preparada una base de datos en MySQL. Tan sólo deberemos abrir el servidor MySQL y crear una base de datos que será la que luego conectemos desde el proyecto Spring Boot.
 
 1. Deberemos instalar un servidor MySQL. Podemos instalar [XAMPP](https://www.apachefriends.org/es/download.html) que en su página tiene versiones para Windows, Mac y Linux. Esto incluirá servidores Apache Tomcat, MariaDB (una versión OpenSource de MySQL, propiedad de Oracle), PHP y Perl. Sólo necesitaremos MySQL y Apache en el caso de que queremos usar PHPMyAdmin. En el tutorial usaremos XAMPP, pero se puede realizar todo con cualquier servidor MySQL. Si prefieres la versión gratis de MySQL Community de Oracle©, la podrás [encontrar aquí](https://dev.mysql.com/downloads/mysql/).
-2. Una vez instalado, deberemos arrancar el servidor. En XAMPP es pulsar en `Start` junto a MySQL.
+2. Una vez instalado, deberemos arrancar el servidor MySQL. En XAMPP es pulsar en `Start` junto a MySQL.
 ![Xampp Start](img/05/01.gif)
 3. Si pulsamos en `Shell` se abrirá una ventana con una línea de comandos donde escribiremos lo siguiente para entrar (con la configuración predeterminada que viene en XAMPP). `-h` sirve para indicarle el host. `-u` el usuario y `-p` para que nos pida la contraseña. La contraseña está vacía por defecto, así que pulsaremos intro cuando nos pregunte. 
 ```bash
@@ -194,7 +194,7 @@ MariaDB [(none)]>
 
 # Persistencia con JPA
 
-Cuando desarrollamos una aplicación en Java, uno de los primeros requerimientos que debemos resolver es la integración con una base de datos para guardar, actualizar y recuperar la información que utiliza nuestra aplicación.
+Cuando desarrollamos una aplicación en Java, uno de los primeros requerimientos que debemos resolver es la integración con una base de datos para guardar, actualizar, borrar y recuperar la información que utiliza nuestra aplicación.
 
 Se llama “persistencia” de los objetos a su capacidad para guardarse y recuperarse desde un medio de almacenamiento. La persistencia en Base de Datos relacionales se suele implementar mediante el desarrollo de funcionalidad específica utilizando la tecnología JDBC o mediante frameworks que automatizan el proceso a partir de mapeos (conocidos como *Object Relational Mapping*, ORM) como es el caso de Hibernate.
 
@@ -414,7 +414,7 @@ Todo esto sin  tener que cargar driver con`DriverManager`, crear una conexión c
 
 ## Usando el repositorio
 
-Para usar nuestro repositorio, tendremos que inyectarlo en el controlador que queramos con la anotación `@Autowired`, de la misma forma que inyectamos los servicios u otros objetos.
+Para usar nuestro repositorio, tendremos que inyectarlo en el controlador (o en el servicio) que queramos con la anotación `@Autowired`, de la misma forma que inyectamos los servicios u otros objetos.
 
 Siguiendo nuestro ejemplo, lo vamos a usar en el `HomeController` para añadir un nuevo usuario a la tabla. 
 
@@ -440,7 +440,7 @@ public class HomeController {
 
 ```
 
-> 💡**Nota:** Lo inyectamos directamente en el `HomeController` para simplificar el código, pero sería conveniente crear un servicio y usar el repositorio desde el servicio, tal y como hemos visto anteriormente.
+> 💡**Nota:** Lo inyectamos directamente en el `HomeController` para simplificar el código, pero sería conveniente crear un servicio y usar el repositorio desde el servicio, tal y como hemos visto anteriormente. 
 
 Hemos creado un nueva url, `/usuario/nuevo/{email}` para poder crear un usuario fácilmente y guardarlo en la base de datos y probar que funciona. 
 
