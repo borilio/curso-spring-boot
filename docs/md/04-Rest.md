@@ -306,6 +306,67 @@ public class Articulo {
 }
 ```
 
+## Lombok
+
+Lombok es una librería que posee muchas anotaciones que nos ahorra trabajos repetitivos de muchos tipos.
+
+Para añadir la librería, añadiremos las siguientes líneas al `pom.xml` de Maven.
+
+```xml
+<!-- https://projectlombok.org/setup/maven -->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.22</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+Una vez actualizadas las dependencias y descargadas las librerías, ya podemos usar todas sus anotaciones.
+
+Las más usadas son:
+
+- `@Getter` y `@Setter`, nos ahorramos tener que crear los métodos getters y setters respectivamente, de cada atributo.
+- `@ToString` en la clase, nos creará el método `toString()`.
+- `@EqualsAndHashCode`, nos creará ambos métodos a la vez.
+- `@NoArgsConstructor`, creará un constructor por defecto (que no recibe parámetros).
+- `@AllArgsConstructor`, creará un constructor que recibe todos los valores de los atributos por parámetros.
+- `@Data`, es un anotación que incluye las ventajas de `@ToString`, `@EqualsAndHashCode`, `@Getter` / `@Setter` y `@RequiredArgsConstructor`. En otras palabras, genera todo el código repetitivo que normalmente se hace en todos los POJOS y Beans, sin tener que usar todas las anotaciones una por una.
+- La lista completa la puedes encontrar en su documentación oficial en la página https://projectlombok.org/features/all.
+
+Usando todos las anotaciones anteriores, la clase Articulo creada anteriormente se podría quedar con el siguiente código:
+
+```java
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString @EqualsAndHashCode
+public class Articulo {
+	@Getter @Setter
+	private long id;
+	@Getter @Setter
+	private int cantidad;
+	@Getter @Setter
+    private String descripcion;
+	@Getter @Setter
+    private double precio;
+	@Getter @Setter
+    private boolean congelado;
+	
+    public Articulo(int cantidad, String descripcion, double precio) {
+		super();
+		this.id = 0;
+		this.cantidad = cantidad;
+		this.descripcion = descripcion;
+		this.precio = precio;
+		this.congelado = false;
+	}
+}
+```
+
+✨De 80 líneas ha pasado a 24. Y se podrían quedar en menos usando la anotación `@Data`.
+
+> 🧪**Nota:** La documentación de Lombok de este tutorial es experimental. No está testeada. Usar con precaución.
+
 
 
 ## @ResponseBody
