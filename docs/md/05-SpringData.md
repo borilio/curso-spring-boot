@@ -289,9 +289,21 @@ public class User {
 }
 ```
 
+> ✨ **Más magia:** Te puedes ahorrar hacer los getters y los setters usando las anotaciones `@Getter` y `@Setter` en la definición de los atributos, de la siguiente forma:
 
+```java
+public class User {
+  // Atributos
+  @Getter @Setter
+  private int id;
+  @Getter @Setter
+  private String userName;
+  @Getter @Setter
+  private String email;
+  ...
+```
 
-Ahora deberíamos de ir a nuestra base de datos, crear un script para definir la tabla Usuarios con los campos id, userName y password… etc, definir los tipos de los campos de MySQL compatibles con los tipos de Java. En resumidas cuentas, **debemos** **conocer el lenguaje SQL**, y no solo las consultas DML (*Data Manipulation Lenguage*), si no también las DDL (*Data Definition Language*) para la creación de las bases de datos y sus restricciones.
+Ahora deberíamos de ir a nuestra base de datos, crear un script para definir la tabla Usuarios con los campos id, userName y password… etc, definir los tipos de los campos de MySQL compatibles con los tipos de Java. En resumidas cuentas, **debemos** **conocer el lenguaje SQL**, y no solo las consultas DML (*Data Manipulation Language*), si no también las DDL (*Data Definition Language*) para la creación de las bases de datos y sus restricciones.
 
 Si más adelante, decidimos añadir un atributo a nuestra clase (o modificar alguno existente), deberemos ir de nuevo a nuestra base de datos, hacer las modificaciones pertinentes al script y actualizar la tabla con los nuevos atributos que le hayamos hecho a la clase.
 
