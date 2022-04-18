@@ -369,6 +369,10 @@ public class Articulo {
 
 
 
+💡Podéis encontrar más información en https://javatodev.com/lombok-spring-boot/.
+
+
+
 ## @ResponseBody
 
 La anotación `@ResponseBody` le indica a un controlador que el objeto que retornemos se debe convertir automáticamente en JSON y eso será lo que se envíe como respuesta, en lugar de ir a una vista con Thymeleaf.

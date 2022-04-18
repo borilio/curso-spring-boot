@@ -42,7 +42,7 @@ También puede ser útil cuando la tipología de la aplicación no nos permita e
 4. Y ya podemos enlazar desde HTML, usando la etiqueta `th:href`, examinando en las librerías la ruta correcta al archivo externo.
 
 ```html
-<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css} "/>
+<link th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" th:rel="stylesheet"/>
 <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 ```
 

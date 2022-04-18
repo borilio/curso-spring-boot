@@ -109,8 +109,8 @@ Vamos a ver los pasos usando Spring Tool Suite 4.
 1. Iniciamos el asistente con **File -> New -> Spring Starter Project**
    - **Service URL:** Es la url de la web que nos generará el proyecto. Dejamos la que viene.
    - **Name:** Este será el nombre del proyecto. Por ejemplo, test-holamundo.
-   - Dejamos que use la localización por defecto, es que dentro de nuestro workspace.
-   - **Type:**, dejamos Maven Project. También se puede usar Gradle como gestor de proyectos.
+   - **Location:** Dejamos que use la localización por defecto, que es dentro de nuestro workspace.
+   - **Type:** Dejamos Maven Project. También se puede usar Gradle como gestor de proyectos.
    - **Packaging**: Lo dejamos en Jar (ya que se ejecutará como un proyecto Java básico, y no web, aunque internamente sea web😎).
    - **Java Version:** Lo dejamos en la que venga por defecto, pero aquí es donde elegiremos la versión de JDK que usará nuestra aplicación.
    - **Language:** Lo dejaremos en Java, pero si lo quisiéramos hacer el Kotlin o Groovy, aquí se cambiaría.
@@ -205,7 +205,7 @@ Para ello, seleccionamos el proyecto -> botón derecho -> Run as ... -> Spring B
 
 ![Consola STS4](img/00/08.png)
 
-Por la consola nos mostrará toda la información sobre la aplicación, despliege, estado del servidor, mapeo de rutas, base de datos, etc. Cuando termine todo el proceso automático, ya podemos ir a http://localhost:8080 y allí nos aparecerá nuestra página `home.html`.
+Por la consola nos mostrará toda la información sobre la aplicación, despliegue, estado del servidor, mapeo de rutas, base de datos, etc. Cuando termine todo el proceso automático, ya podemos ir a http://localhost:8080 y allí nos aparecerá nuestra página `home.html`.
 
 ![Aplicación abierta en navegador](img/00/10.png)
 
@@ -235,14 +235,14 @@ Para empezar a usar *Dev Tools* podemos elegirlas al inicio de la creación de u
 </dependency>
 ```
 
-Si queremos que el navegador se recargue automáticamente cada vez que haya cambios en el servidor, debemos instalar el plugin de [livereload para Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei). En Chrome habrá que configurarlo para tenga acceso a localhost y ya funcionará directamente.
+Si queremos que el navegador se recargue automáticamente cada vez que haya cambios en el servidor, debemos instalar el plugin de [livereload para Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei). En Chrome habrá que habilitarlo primero (haciendo un clic sobre su icono) y después configurarlo para tenga acceso a localhost y ya funcionará directamente (es importante el orden, primero habilitar el plugin, y después ponerlo en localhost).
 
 # Ventajas de Spring y SpringBoot respecto a JavaEE
 
 **Usando Spring Framework nos hemos ahorrado:** (respecto a una app JavaEE)
 
 - Crear un Servlet. En un servlet hay que sobrescribir al menos un método que reciba las peticiones, o el `doGet()` o el `doPost()`. El servlet debe heredar de la clase `HttpServlet`.
-- Que dicho servlet nos redirija a la vista usando la clase `RequestDispatcher` o `response.sendRedirect()`. Mínimo son 3 o 4 líneas de código en el/los método(s) anteriormente mencionado.
+- Que dicho servlet nos redirija a la vista usando la interfaz `RequestDispatcher` o `response.sendRedirect()`. Mínimo son 3 o 4 líneas de código en el/los método(s) anteriormente mencionado.
 - Registrar el servlet en el archivo de configuración xml. Hay IDE's que lo registran por nosotros, otros no.
 - Registrar cada una de las url que podemos gestionar con el servlet, o bien usando anotaciones o bien usando el xml de configuración.
 
@@ -253,6 +253,6 @@ Si queremos que el navegador se recargue automáticamente cada vez que haya camb
 - Tener que añadir manualmente todas las dependencias iniciales en Maven en el `pom.xml`.
 - Crear una estructura de directorios para albergar todos los recursos de nuestra aplicación.
 
-**Y TODO ESTO EN UNA APLICACIÓN CON UN ¡¡¡ HOLAMUNDO !!!**. Si nuestra aplicación usa base de datos (MySQL o cualquier otra), persistencia, conectores, repositorios JSON, autentificación, seguridad, herramientas de desarrollo... las ventajas de multiplican.
+**Y TODO ESTO EN UNA APLICACIÓN CON UN ¡¡¡ HOLAMUNDO !!!**. Si nuestra aplicación usa base de datos (MySQL o cualquier otra), persistencia, conectores, repositorios JSON, autentificación, seguridad, herramientas de desarrollo... las ventajas se multiplican.
 
 ![Magic](img/00/11.gif)

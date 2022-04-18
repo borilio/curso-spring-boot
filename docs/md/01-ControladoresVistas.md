@@ -113,12 +113,11 @@ public String home(Model model) {
    model.addAttribute("saludo", mensaje);
    return "home";
 }
-
 ```
 
-- Lo único que hacemos es inyectar (poner un objeto de la clase Model) en los parámetros del método y ya lo tenemos disponible para usarlo.
+- Lo único que hacemos es inyectar (poner un objeto de la interfaz Model) en los parámetros del método y ya lo tenemos disponible para usarlo.
 
-- El objeto de la clase Model representa el modelo de datos, y podemos adjuntarlo cualquier otro objeto, usando su método:
+- El objeto de la interfaz Model representa el modelo de datos, y podemos adjuntarle cualquier otro objeto, usando su método:
 
   - `addAttribute(string, object)` -> Recibe un String y un Object. El String indica el nombre con el que vamos a guardar el Object dentro del modelo. Igual que el `setAttribute` de `Request`, `Session` y `Application`.
   - No contiene un método tipo `removeAttribute()`, por lo que si queremos eliminar un objeto del model (algo raro), siempre podemos hacer `addAtributte("mensaje", null)`.
@@ -200,6 +199,8 @@ También ofrece la característica llamada ***plantillas naturales***, que se ba
 
 Podemos encontrar la documentación oficial en https://www.thymeleaf.org/documentation.html.
 
+Otra documentación interesante se puede encontrar en https://frontbackend.com/thymeleaf/thymeleaf-tutorial.
+
 A continuación vamos a ver ejemplos de las estructuras básicas de cualquier lenguaje de programación que se pueden usar en Thymeleaf.
 
 ## Mostrar información del modelo
@@ -216,7 +217,7 @@ model.addAttribute("nombre", usuario);
 <p th:text="${nombre}">El contenido será eliminado</p>
 ```
 
-Como valor del atributo `th:text` se usa *Expression Language* (EL). En resumen, se usa la sintaxis `${ }` y se evalúa la expresión de su interior. Puede ser el contenido de una variable u otra expresión más compleja. Por ejemplo `${nombre.toLowerCase() + '!!!' }`
+Como valor del atributo, `th:text` usa *Expression Language* (EL). En resumen, se usa la sintaxis `${ }` y se evalúa la expresión de su interior. Puede ser el contenido de una variable u otra expresión más compleja. Por ejemplo `${nombre.toLowerCase() + '!!!' }`
 
 El texto de `El contenido del párrafo será eliminado`, será sustituido en tiempo de compilación por el resultado de la expresión `nombre`, por lo que la plantilla una vez compilada, quedará de la siguiente forma:
 
@@ -266,7 +267,7 @@ También posee estructuras de tipo **switch-case**. Así nos evitaríamos en alg
 ```html
 <div th:switch="${user.rol}">
   <p th:case="'admin'">Usuario es administrador</p>
-  <p th:case="${roles.manager}">Usuario es manager</p>
+  <p th:case="'${roles.manager}'">Usuario es manager</p>
   <p th:case="${roles.editor}">Usuario es editor</p>
   <p th:case="*">El usuario es otra cosa</p>
 </div>
@@ -410,6 +411,63 @@ Generaría el siguiente HTML final:
         <th>16.0€</th>
     </tr>
 </table>
+```
+
+
+
+### Accediendo al índice y tamaño del bucle for each
+
+Si necesitamos acceder al tamaño de la lista o bien al índice actual del bucle, podemos añadir una nueva variable tal y como se ve en el siguiente ejemplo:
+
+```html
+<tr th:each="producto, iterador : ${productos}">
+    <td th:text="${producto.nombre}"></td>
+    <td th:text="${producto.precio}"></td>
+    <td th:text="${(iterador.index+1) + '/' + iterador.size }"></td>
+</tr>
+```
+
+La variable `iterador`, tiene las siguientes propiedades:
+
+- `index`, indica el índice del bucle, empezando por 0.
+- `count`, indica el índice del bucle, empezando por 1.
+- `size`, indica el tamaño total de la colección que estamos recorriendo.
+
+
+
+### Ejemplo usando un for con índices
+
+También podemos hacer un bucle for tradicional que recorra una secuencia de números. Le indicamos un inicio, un final y opcionalmente un incremento. Podemos verlo más fácil con un ejemplo:
+
+```html
+<select name="foo">
+	<option th:each="i : ${#numbers.sequence(1, 10, 2)}" th:value="${i}" th:text="'No.' + ${i}"></option>
+</select>
+```
+
+Con `${#numbers.sequence()}`, creamos la secuencia que queremos recorrer. El método `.sequence()` recibe 3 parámetros. El primero es el inicio de la secuencia, el segundo es el final de la secuencia, y el último, que es opcional, es el incremento en cada iteración, si no lo indicamos por defecto será 1. 
+
+El ejemplo generaría el siguiente HTML:
+
+```html
+<select name="foo">
+    <option value="1">No. 1</option>
+    <option value="3">No. 3</option>
+    <option value="5">No. 5</option>
+    <option value="7">No. 7</option>
+    <option value="9">No. 9</option>
+</select>
+```
+
+
+
+## Comentarios en el servidor
+
+También se pueden usar comentarios de código que serán eliminados en la parte del servidor al procesar la plantilla. Hay que usar la sintaxis `<!--/*    */-->` , que es la de los comentarios HTML y CSS juntos. Tal y como se ve en el siguiente ejemplo.
+
+```html
+<!--/* Este comentario será eliminado al procesar el archivo Thymeleaf */-->
+<!-- Y este comentario si llegará al navegador del cliente -->
 ```
 
 

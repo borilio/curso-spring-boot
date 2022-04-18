@@ -461,7 +461,7 @@ MariaDB [dbejemplo]> SELECT * FROM usuarios;
 MariaDB [dbejemplo]>
 ```
 
-> 🧐**Nota:** Puedes observar por la consola de STS4, las consultas SQL que se enviaron a la base de datos.
+> 🧐**Nota:** Puedes observar por la consola del IDE, las consultas SQL que se enviaron a la base de datos.
 
 El acceso a la capa de datos se ve simplificado usando los repositorios, además que su uso no depende de la estructura o tipo de base de datos que usemos, pudiendo cambiar la base de datos, sin que ello afecte a la implementación de nuestra capa DAO.
 

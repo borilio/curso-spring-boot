@@ -50,8 +50,8 @@ Veamos exactamente el mismo ejemplo anterior, pero usando la anotación `@Reques
 
 ```java
 @GetMapping("/usuario/validar")
-public String validarUser(
-    @RequestParam("nombre") String nombre,
+public String validarUser( 
+    @RequestParam("nombre") String nombre, 
     @RequestParam("pass") String pass
 ){
     // Creamos el usuario con los valores recibidos
@@ -106,8 +106,8 @@ Así podemos recuperar parámetros de la petición directamente, ya vengan de un
 Veamos otro ejemplo para verlo en otro contexto.
 
 ```java
-@RequestMapping(value = "borrar", method = RequestMethod.GET)
-public String borrar(@RequestParam Integer identificacion){
+@RequestMapping(value = "/borrar", method = RequestMethod.GET)
+public String borrar(@RequestParam(name="id", required=false) Integer identificacion){
     //Vamos a borrar un usuario por id recibida
     BaseDatos db = new BaseDatos();
     if (identificacion!=null) { //si no es null...
@@ -117,11 +117,15 @@ public String borrar(@RequestParam Integer identificacion){
 }
 ```
 
-Lo que hacemos es inyectar la variable (`Integer id`) que va a recoger el valor recibido por GET, y con la anotación `@RequestParam("id")`, le estamos diciendo que el valor del parámetro del request que se llame “id”, se meta en la variable `Integer identificacion`.
+Lo que hacemos es inyectar la variable (`Integer identificacion`) que va a recoger el valor recibido por GET, y con la anotación `@RequestParam("id")`, le estamos diciendo que el valor del parámetro del request que se llame “id”, se meta en la variable `Integer identificacion`.
 
 Se ha usado una clase envoltorio `Integer` para la variable `identificacion`, ya que al tener el `required=false`, en caso de no llegar en la petición ningún parámetro con nombre `id`, `identificacion` valdrá `null`. Si ponemos `required=true` o nada, se lanzará una excepción de tipo `MissingServletRequestParameterException` y la ejecución del programa se parará.
 
 En el `@RequestParam()`, si se indican más de un atributo (`name` y `required`), han de indicarse con pares de nombre=valor separados por comas. Si solo se indica el nombre del parámetro, solo seria necesario indicarle el valor Ej: `@RequestParam("id")`. 
+
+> 🤓Más información en https://www.baeldung.com/spring-request-param
+
+
 
 ------
 
@@ -353,7 +357,7 @@ Hacer una aplicación en Spring Boot que simule una autentificación de usuario.
 - `/usuarios/validar` -> Extraemos los valores de la petición. Creamos un objeto `User` con los valores extraídos, y:
   - Si son válidos (que el password sea ‘12345’) tenemos que ir a `home.html`, pero insertando el usuario ya validado en la sesión.
   - Si no es válido tendremos que volver a `login.html`, enviando un mensaje de “Usuario y/o contraseña no válidos” para la vista.
-  - Para comprobar si un usuario es válido o no, podemos comprobarlo manualmente, o bien usando la clase `UserService`, que tiene un método {{FIX comprobar esto}}
+  - Para comprobar si un usuario es válido o no, podemos comprobarlo manualmente, o bien usando la clase `UserService`, que tiene un método llamado `.validar()` que recibe un usuario y devuelve un true si la contraseña es 12345 o false en caso contrario.
 - `/usuarios/logout` -> Invalidaremos la sesión actual, y nos vamos a `login.html`. Usaremos esta url en la opción del menú principal “Cerrar sesión”.
 - `/` -> Inicialmente íbamos directos a `login.html`. Ahora tendremos que comprobar primero:
   - Si hay un usuario en la sesión, en ese caso vamos a `home.html` (si existe el usuario en la sesión, ya está validado, por lo que no hay que comprobar nada más).
@@ -373,9 +377,10 @@ Es decir, ese espacio se declara cuando el servidor arranca la aplicación y man
 
 Aquí sólo se colocarán atributos globales que deban compartirse entre distintos clientes. Un ejemplo sería un contador de visitas, un contador de promociones entregadas o una lista de usuarios conectados. Cada usuario tiene su propio espacio (sesión) pero para tener una lista de TODOS los usuarios conectados simultáneamente a la aplicación tendríamos que usar el ApplicationScope (añadiendo el usuario a la lista en el momento que inicia la sesión y eliminándolo de la lista cuando cierra sesión).
 
-> **Atención:** El ApplicationScope (o ContextScope) no es seguro. Hay un problema. Cualquiera en la aplicación tiene acceso a los atributos de éste scope, y eso significa que habrá múltiples servlets, y múltiples servlets significan múltiples hilos de ejecución simultáneos. Un hilo de un cliente “A” puede modificar los atributos del ApplicationScope de forma que al cliente “B” se le muestre un resultado inesperado debido a que el estado del atributo ha cambiado en el transcurso de la ejecución.
+> **⚠** El ApplicationScope (o ContextScope) no es seguro. Hay un problema. Cualquiera en la aplicación tiene acceso a los atributos de éste scope, y eso significa que habrá múltiples servlets, y múltiples servlets significan múltiples hilos de ejecución simultáneos. Un hilo de un cliente “A” puede modificar los atributos del ApplicationScope de forma que al cliente “B” se le muestre un resultado inesperado debido a que el estado del atributo ha cambiado en el transcurso de la ejecución.
 
 **Desde Java**
+
 ```java
 @Controller
 public class HomeController {
