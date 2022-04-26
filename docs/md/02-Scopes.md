@@ -6,7 +6,7 @@
 
 
 
-# @RequestMapping. Obtener los parámetros de la petición
+# @RequestParam. Obtener los parámetros de la petición
 
 Cada vez que enviamos desde un formulario valores (por método GET) o bien directamente desde la url de nuestro navegador, se envían de la siguiente forma:
 
@@ -235,9 +235,9 @@ public String logout(HttpServletRequest request) {
 **Desde la vista**
 
 ```html
-<p th:text="${#request.getAttribute('mensaje')}"></p>
-<p th:text="${request.mensaje}"></p>
-<p th:text="${mensaje}"></p> <!-- Lo encontrará igualmente -->
+<p th:text="${#request.getAttribute('usuario')}"></p>
+<p th:text="${request.usuario}"></p>
+<p th:text="${usuario}"></p> <!-- Lo encontrará igualmente -->
 ```
 
 En el primer ejemplo, usamos el símbolo almohadilla `#` porque así accedemos al objeto directamente, y así sería la forma de poder usar sus métodos tal y como lo haríamos en java. 
@@ -302,7 +302,7 @@ También se puede usar la anotación `@SessionAttribute` en la firma del método
 
 ```java
 @RequestMapping("/")
-public String login(@SessionAttribute(value="user", required = false) User userActivo) {
+public String login(@SessionAttribute(value="user", required=false) User userActivo) {
     if (userActivo != null) {
         return "home";
     } else {
@@ -319,16 +319,16 @@ Una vez visto como lo guardamos desde el controlador en la sesión, veremos como
 
 ```html
 <h3>Validar usuario</h3>
-<div th:if="${session.usuarioActivo}">
-    <p>Bienvenido, [[${session.usuarioActivo.nombre}]]</p>
+<div th:if="${session.user}">
+    <p>Bienvenido, [[${session.user.nombre}]]</p>
     <p>SessionID: [[${#session.id}]]</p>
 </div>
-<div th:unless="${session.usuarioActivo}">
+<div th:unless="${session.user}">
     <p>No hay usuario en la sesión</p>
 </div>
 ```
 
-En la vista, recuperamos el objeto `usuarioActivo`, que si venimos de `validar()` si existirá en el sessionScope, y si venimos de `logout()` no. 
+En la vista, recuperamos el objeto `user`, que si venimos de `validar()` si existirá en el sessionScope, y si venimos de `logout()` no. 
 
 ---
 

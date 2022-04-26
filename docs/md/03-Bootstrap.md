@@ -43,7 +43,7 @@ También puede ser útil cuando la tipología de la aplicación no nos permita e
 
 ```html
 <link th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" th:rel="stylesheet"/>
-<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js}"></script>
 ```
 
 > **Nota:** Deberemos inspeccionar las librerías para encontrar la ruta correcta. Pueden cambiar de una versión a otra.
@@ -72,7 +72,7 @@ Vamos a suponer el siguiente trozo de código, que nos ha quedado tan bonito que
 
 ```html
 <footer class="fixed-bottom bg-dark text-light p-3">
-    <div class="float-end small">Copyleft Salva'21-22</div>
+    <div class="float-end small">Copyright Salva'21</div>
 </footer>
 ```
 
@@ -125,8 +125,8 @@ Thymeleaf puede incluir fragmentos previamente definidos como nuevas partes en s
 
 Ambos atributos son muy parecidos y se usan de forma similar. Se diferencian en lo siguiente:
 
-- `th:insert` -> **Insertará** el fragmento especificado DENTRO de la etiqueta que tenga `th:insert`, como si fuese una etiqueta hija. Se insertará la etiqueta fragment en el interior de la etiqueta host.
-- `th:replace` -> **Reemplazará** el fragmento especificado por el indicado en `th:replace`. Se eliminará la etiqueta host por la etiqueta fragment.
+- `th:insert` -> **Insertará** el fragmento especificado DENTRO de la etiqueta que tenga `th:insert`, como si fuese una etiqueta hija. Se sustituye el contenido de la etiqueta padre por la etiqueta fragment y todo su contenido.
+- `th:replace` -> **Reemplazará** el fragmento especificado por el indicado en `th:replace`. Se eliminará la etiqueta padre por la etiqueta fragment.
 
 La sintaxis sería la siguiente:
 
@@ -181,7 +181,7 @@ Los fragmentos pueden recibir parámetros para que estos actúen de forma distin
 
 ```html
 <!-- /fragmentos/mensaje.html -->
-<div th:fragment="alerta( texto, color)" th:class="'shadow alert alert-' + ${color}">
+<div th:fragment="alerta(texto, color)" th:class="'shadow alert alert-' + ${color}">
 	<h4>
 		<span>Atención</span>
 		<a href="#" class="btn btn-close float-end"></a>
@@ -242,7 +242,7 @@ Tan sólo tendríamos que enviarle otros valores para obtener otro resultado:
 
 Hemos tenido que incluir la primera parte del contenido entre comillas simples `shadow alert alert-`, ya que todo es una expresión, y así concatenaríamos ambos Strings. La primera parte que es un literal, con la segunda que es una variable `'shadow alert alert-'` + `${color}`.
 
-Se podría usar también las sustituciones literales de texto, funcionando igual que los template strings de JavaScript. Así simplificamos las expresiones cuando tenemos que concatenar varios strings.
+Se podría usar también las sustituciones literales de texto, funcionando igual que los template strings de JavaScript. Así simplificamos las expresiones cuando tenemos que concatenar varios strings. 
 
 ```html
 <etiqueta th:class="|shadow alert alert-${color}|"></etiqueta>

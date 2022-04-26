@@ -138,7 +138,7 @@ Ahora necesitamos en el controlador donde usemos el servicio, una instancia del 
 public class APIController {
 	
 	@Autowired
-	ArticulosService articuloService;
+	private ArticulosService articuloService;
 	
 	@GetMapping("/articulo/{id}")
 	public String getArticuloPorId(
@@ -163,7 +163,7 @@ Ya podemos usar de una forma simple y eficiente los servicios de `ArticuloServic
 
 ## ¿Qué es REST?
 
-REST es un acrónimo de ***RE**epresentational **S**tate **T**ransfer*. En pocas palabras, si HTTP es transferencia de archivos, REST se basa en transferencia de recursos. Aunque ambos siguen usando el mismo protocolo, el HTTP, lo que cambia es la respuesta ofrecida.
+REST es un acrónimo de ***RE**presentational **S**tate **T**ransfer*. En pocas palabras, si HTTP es transferencia de archivos, REST se basa en transferencia de recursos. Aunque ambos siguen usando el mismo protocolo, el HTTP, lo que cambia es la respuesta ofrecida.
 
 Mientras que una respuesta HTTP estándar, es texto que crea otra página web que representa el navegador, una respuesta REST tiene el formato de un archivo XML o JSON. Se usan principalmente para el intercambio de datos, de una manera ligera y legible.
 
@@ -308,6 +308,8 @@ public class Articulo {
 
 ## Lombok
 
+>🧪**Nota:** La documentación de Lombok de este tutorial es experimental. No está testeada. Usar con precaución.
+
 Lombok es una librería que posee muchas anotaciones que nos ahorra trabajos repetitivos de muchos tipos.
 
 Para añadir la librería, añadiremos las siguientes líneas al `pom.xml` de Maven.
@@ -365,10 +367,6 @@ public class Articulo {
 
 ✨De 80 líneas ha pasado a 24. Y se podrían quedar en menos usando la anotación `@Data`.
 
-> 🧪**Nota:** La documentación de Lombok de este tutorial es experimental. No está testeada. Usar con precaución.
-
-
-
 💡Podéis encontrar más información en https://javatodev.com/lombok-spring-boot/.
 
 
@@ -396,7 +394,7 @@ public class APIController {
 
 Tenemos un controlador `APIController`, que será el encargado de recibir todas las peticiones REST. Destacamos:
 
-- Le inyectamos el servicio `ArticulosService`, que será el encargado de usar la lógico de negocio para obtener la información que se le pide (obtener artículos por id, por precio, por descripción, todos los artículos, etc.)
+- Le inyectamos el servicio `ArticulosService`, que será el encargado de usar la lógica de negocio para obtener la información que se le pide (obtener artículos por id, por precio, por descripción, todos los artículos, etc.)
 - Con la anotación `@ResponseBody` le indicamos al controlador que no vamos a redireccionar a una vista HTML, si no que lo que vamos a devolver es un objeto, el cual será convertido a JSON por Spring Boot. Por eso tenemos que indicar en la firma del método la clase del objeto que vamos a retornar.
 - El método `.getArticulo()` será llamado cada vez que realicemos una consulta a `/api/articulo/{id}`, donde `{id}` es la id del artículo a consultar. El servicio llamará al método que ya tiene para tal fin `articulosService.getArticuloById()`, el cual retornará el artículo cuya id sea {id} o bien `null` si esa id no se encuentra.
 
@@ -472,7 +470,7 @@ public class APIController {
 
 Hacer un proyecto Spring Boot, con un REST de usuarios funcional como el siguiente. El servicio será un mock que actuará sobre una colección.
 
-![Vista página principal](img/04/02.png)
+![x](img/04/02.png)
 
 En https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-6 encontrarás los siguientes recursos para reutilizar:
 
