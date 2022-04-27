@@ -440,7 +440,7 @@ public class HomeController {
 
 ```
 
-> 💡**Nota:** Lo inyectamos directamente en el `HomeController` para simplificar el código, pero sería conveniente crear un servicio y usar el repositorio desde el servicio, tal y como hemos visto anteriormente. 
+> 💡**Nota:** Aquí inyectamos el repositorio directamente en el `HomeController` para simplificar el código, pero sería conveniente crear un servicio y usar el repositorio desde el servicio, tal y como hemos visto anteriormente. 
 
 Hemos creado un nueva url, `/usuario/nuevo/{email}` para poder crear un usuario fácilmente y guardarlo en la base de datos y probar que funciona. 
 
@@ -565,7 +565,7 @@ userRepo.deleteById(5); //Borramos el usuario cuya id es 5
 
 ## Personalizar el repositorio
 
-Hemos visto que los repositorios tienen muchos métodos para hacer prácticamente todo lo que necesitamos, pero, ¿y si necesito un método, por ejemplo, que me busque por `userName` y me devuelva el usuario que tenga un valor concreto en ese campo? Pues es tan fácil como pedir un deseo.
+Hemos visto que los repositorios tienen muchos métodos para hacer prácticamente todo lo que necesitamos, pero, ¿y si necesito un método, por ejemplo, que me busque por `userName` y me devuelva el usuario que tenga un valor concreto en ese campo? **Pues es tan fácil como pedir un deseo**.
 
 Definimos la firma del método que nos gustaría tener, y como por arte de magia, lo tendremos disponible en nuestro repositorio:
 
@@ -596,7 +596,7 @@ Y si hacemos una consulta a `/usuario/username/maxpower@ejemplo.com`, veremos po
 User [id=5, userName=maxpower@ejemplo.com, email=maxpower@ejemplo.com, password=39b59b54, admin=false]
 ```
 
-🎉Funcionó, sin escribir una consulta SQL, o tener que implementar el código del el método `findByUserName()`. 
+🎉Funcionó, sin escribir una consulta SQL, o tener que implementar el código del método `findByUserName()`. 
 
 Vamos más allá….se puede hacer cosas tan locas como lo siguiente:
 
@@ -614,7 +614,7 @@ Nosotros decidimos si nos devuelve un `User`, o un `List<User>`. El método tend
 
 Puedes encontrar la lista completa de operadores para definir tus métodos [en el siguiente enlace de la documentación oficial.](http://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation)
 
-> ⚠**Atención:** El nombre de los atributos en los métodos deberán ser iguales que están definidos, usando la anotación camelCase. Si Por ejemplo el atributo es `userName`, el método deberá llamarse `findByUserName`. Sus getters y setters deberán estar bien definidos también, si no no funcionará.
+> ⚠**Atención:** El nombre de los atributos en los métodos deberán nombrarse de la misma forma que están definidos, usando la anotación camelCase. Si por ejemplo, el atributo es `userName`, el método deberá llamarse `findByUserName`. Sus getters y setters deberán estar bien definidos también, si no no funcionará.
 
 
 
