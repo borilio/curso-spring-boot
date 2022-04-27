@@ -534,7 +534,7 @@ GET localhost:8080/api/usuarios
 
 ## POST
 
-El método `POST` se utiliza para enviar una entidad a un recurso en específico. Aunque se pueda usar `GET` para enviar datos, tiene muchas limitaciones que `POST` no tiene. Su fin es más genérico, envía información para que quién la reciba haga lo que estime con ella. `POST` no es idempotente. Una nueva petición POST tendría  un efecto distinto que la primera llamada (por ejemplo, dos peticiones seguidas insertarían 2 usuarios en la base de datos).
+El método `POST` se utiliza para enviar una entidad a un recurso específico. Aunque se pueda usar `GET` para enviar datos, tiene muchas limitaciones que `POST` no tiene. Su fin es más genérico, envía información para que quién la reciba haga lo que estime con ella. `POST` no es idempotente. Una nueva petición POST tendría  un efecto distinto que la primera llamada (por ejemplo, dos peticiones seguidas insertarían 2 usuarios en la base de datos).
 
 ```http
 POST localhost:8080/api/usuario/user
@@ -598,7 +598,7 @@ public class APIController {
 		return userService.getAll();
 	}
 	...	
-	@DeleteMapping("/usuarios")
+	@DeleteMapping("/usuarios/")
 	public void deleteAllUsers() {
 		userService.deleteAll();
 	}
@@ -771,7 +771,7 @@ public class APIController {
 }
 ```
 
-Y si con *postman* hacemos la petición de tipo `POST` y en el *body* le indicamos *raw* y escribimos directamente el JSON, la url `/api/usuario` recibirá el JSON indicado y gracias al `@RequestBody`, Spring lo convertirá a un objeto `User` y gracias al servicio lo insertaremos en la “base de datos”. La petición nos devolverá el objeto que ha sido guardado.
+Y si con *postman* hacemos la petición de tipo `POST` y en el *body* le indicamos *raw* y a la derecha del todo, el formato JSON. Y escribimos directamente el JSON en el cuerpo de la petición, la url `/api/usuario` recibirá el JSON indicado y gracias al `@RequestBody`, Spring lo convertirá a un objeto `User` y gracias al servicio lo insertaremos en la “base de datos”. La petición nos devolverá el objeto que ha sido guardado. 
 
 ![postman-nuevousuario](img/04/06.png)
 
@@ -812,7 +812,7 @@ Definimos el método en la interfaz y lo implementaremos:
 ```java
 public interface UserService {
 	...
-	public User updateUser(User nuevo, int id);    
+	public User update(User nuevo, int id);    
 }
 ```
 
@@ -821,7 +821,7 @@ public interface UserService {
 public class UserServiceImpl implements UserService {
 	...
 	@Override
-	public User updateUser(User nuevo, int id) {
+	public User update(User nuevo, int id) {
 		User actualizado = null;
 		for (User u: this.listaUsuarios) {
 			if (u.getId() == id) {
@@ -848,7 +848,7 @@ public class APIController {
 			@PathVariable Integer id,
 			@RequestBody User userUpdated
 			) {
-		return userService.updateUser(userUpdated, id);
+		return userService.update(userUpdated, id);
 	}
 }
 ```
