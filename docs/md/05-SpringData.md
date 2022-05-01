@@ -180,7 +180,7 @@ MariaDB [(none)]>
    ```
 
   - En el `driver`, pondremos siempre el que viene ahí. Si usamos otro tipo de base de datos, usaremos el driver que indique el fabricante.
-  - En la `url` deberemos indicarle la url de acceso a nuestra BD (dominio+servidor+puerto+base de datos). En nuestro caso,  la base de datos es `dbejemplo`, que es la que teníamos preparada. El resto es la configuración por defecto.
+  - En la `url` deberemos indicarle la url de acceso a nuestra BD (dominio+servidor+puerto+base de datos). En nuestro caso,  la base de datos es `dbejemplo`, que es la que teníamos preparada.
   - El `username` por defecto es `root`. La contraseña por defecto está vacía, por eso no indicamos nada. Si configuramos otro usuario y/o contraseña en la BD aquí es donde la estableceremos.
 
 
@@ -329,7 +329,7 @@ public class User {
 - Con `@Table` especificamos el nombre de la tabla en nuestra bd (por defecto, sin esta anotación, nos creará una tabla con el mismo nombre que la clase, `User`).
 - `@Id` encima de un atributo, le indicamos que ese campo será el campo clave de la tabla, y con `@GeneratedValue` le indicamos que será un campo autogenerado.
   - `@GeneratedValue(strategy=GenerationType.AUTO)` Es la opción por defecto si no se indica nada (como en nuestro ejemplo). Permite al proveedor de la persistencia elegir la estrategia de generación de id’s.
-  - `@GeneratedValue(strategy= GenerationType.IDENTITY)` Usará una columna con incremento automático que permite que la BD genere un nuevo valor para cada operación de inserción. 
+  - `@GeneratedValue(strategy=GenerationType.IDENTITY)` Usará una columna con incremento automático que permite que la BD genere un nuevo valor para cada operación de inserción. 
 
 - Si queremos que los nombres de los campos en MySQL sean distintos que los de la clase en Java, podemos usar anotaciones como `@Column(name="pass")`, así el atributo `password`, en la tabla se llamaría `pass`. Se recomienda usar los mismos nombres en Java y MySQL, en la medida de lo posible.
 
@@ -394,7 +394,7 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 }
 ```
 
-La implementación de los métodos ya están desarrollados en la clase `JpaRepository`. Tenemos que parametrizarle la clase del objeto con la que va a tratar (en nuestro ejemplo, `User`), y el tipo de dato de su clave primaria (en nuestro ejemplo, `Integer`).
+La implementación de los métodos ya están desarrollados en la clase `JpaRepository`. Tenemos que parametrizarle la clase del objeto con la que va a tratar (en nuestro ejemplo, `User`), y la clase del tipo de dato de su clave primaria (en nuestro ejemplo, `Integer`).
 
 Y ya tenemos disponible el repositorio, que una vez esté inyectado en el controlador que queramos, podremos crear, obtener, actualizar y borrar elementos de la tabla `usuarios`, entre otras muchas cosas.
 
@@ -444,7 +444,7 @@ public class HomeController {
 
 Hemos creado un nueva url, `/usuario/nuevo/{email}` para poder crear un usuario fácilmente y guardarlo en la base de datos y probar que funciona. 
 
-- Aunque la tabla usuarios varios muchos campos, sólo necesitamos un email. `User` tiene un constructor que sólo recibe un email y asigna automáticamente unos valores a los demás atributos (en `id` pone un número aleatorio, en `userName` usa el email, en `password` usa el *hashcode*, y por defecto `admin` = false).
+- Aunque la tabla usuarios tenga varios campos, sólo necesitamos un email. `User` tiene un constructor que sólo recibe un email y asigna automáticamente unos valores a los demás atributos (en `id` pone un número aleatorio, en `userName` usa el email, en `password` usa el *hashcode*, y por defecto `admin` = false).
 - Con `@PathVariable` extraemos de la url el email que necesitamos. Con eso crea el usuario y se lo pasa por parámetro al método `userRepo.save()`. El valor del atributo `id`lo ponemos a 0 para que entienda que es un nueva inserción (ningún usuario previo tendrá la id 0).
 
 Si escribimos en la url del proyecto, `/usuario/nuevo/pepe@ejemplo.com`, nos deberá de crear ese registro en la base de datos. Y si nos vamos a la base de datos, podemos comprobar que se grabó correctamente.
@@ -484,7 +484,7 @@ public String index(Model model) {
 - Con el método **`.findAll()`** del repositorio, ya nos devuelve directamente un `List<User>`. Lo guardamos y lo adjuntamos al `model`.
 - Y mostramos la vista `index`.
 
-Ahora ya tenemos la lista con todos los usuarios, en el modelo y podemos representarla en la vista como ya hemos hecho otras veces. Imprimimos la lista directamente en el cuerpo de la tarjeta que ya teníamos antes. Hemos usado <code> pero se podría en cualquier elemento HTML.
+Ahora ya tenemos la lista con todos los usuarios, en el modelo y podemos representarla en la vista como ya hemos hecho otras veces. Imprimimos la lista directamente en el cuerpo de la tarjeta que ya teníamos antes. Hemos usado `<code>` pero se podría en cualquier elemento HTML.
 
 ```html
 ...
