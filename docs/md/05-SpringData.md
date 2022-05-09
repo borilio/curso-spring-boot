@@ -915,15 +915,13 @@ Cerramos sesión:
 
 
 
-# Anexo
+# Anexo: Persistencia con JPA en base de datos relacionales
 
 🚧 En construcción. Usar con precaución 🚧
 
-## Persistencia con JPA en base de datos relacionales
-
 Este documento completo trata la persistencia de tablas independientes, que no están relacionadas con otras. En este apartado veremos como se usan en JPA una base de datos que posee relaciones entre tablas.
 
-### Proyecto inicial
+## Proyecto inicial
 
 En el siguiente repositorio, está el proyecto completo que nos servirá de ejemplo, con commits en cada punto importante para ver el proyecto desde el inicio y los cambios realizados durante la evolución del ejemplo.
 
@@ -1085,13 +1083,13 @@ Por ahora no hay nada nuevo, vemos como cada repositorio nos da los elementos de
 
 
 
-### Esquema Entidad-Relación
+## Esquema Entidad-Relación
 
 En el proyecto, tenemos una base de datos simple con varias relaciones, pero nos centraremos por ahora en los Usuarios y los Roles. Cada `usuario` tiene un `rol` definido en otra tabla.
 
 <img src="img/05/17.png" alt="Entidad-Relación" style="zoom:67%;" />
 
-### Obteniendo información de otras tablas
+## Obteniendo información de otras tablas
 
 Ahora mismo, con los repositorios obtenemos la información que hay en las tablas TAL CUAL. Es decir, que si obtengo la lista de usuarios, tendré un `List<Usuario>` donde cada `Usuario` tiene los atributos tal cual están definidos, por lo que podré saber la `id_rol` que tiene el usuario (1, 2, 3, etc.), pero no tendré información del nombre del `rol` (“administrador”, “visor”, “usuario”, etc.).
 
@@ -1099,14 +1097,14 @@ Ahora mismo, con los repositorios obtenemos la información que hay en las tabla
 
 En nuestro ejemplo sería cambiando el atributo `id_rol`, por un objeto de la clase `Rol`, y usando las anotaciones correctas.
 
-#### @ManyToOne - de muchos a uno
+### @ManyToOne - de muchos a uno
 
 Como la relación entre `usuarios` y `roles` es de muchos a uno (un rol está muchas veces en la tabla `usuarios`, y una única vez en la tabla `roles`), pues debemos hacer los siguientes cambios:
 
-1. En la la clase `Usuario`, eliminamos el atributo `id_rol` y lo sustituimos por un objeto de la clase `Rol`.
+1. En la clase `Usuario`, eliminamos el atributo `id_rol` y lo sustituimos por un objeto de la clase `Rol`.
 2. Le añadimos la anotación `@ManyToOne`, para indicar el tipo de relación que hay con ese atributo.
 3. Le añadimos la anotación `@JoinColumn`, para indicar los campos que se relacionan en ambas entidades. Tiene los siguientes argumentos:
-   * `name` : Le indicamos el campo de ESTA entidad que representa la clave foránea
+   * `name` : Le indicamos el campo de ESTA entidad que representa la clave foránea.
    * `referencedColumnName`:  Le indicamos el campo clave de la tabla a la que hace referencia.
 4. No es necesario hacer ningún cambio en la clase `Rol`, ni en ninguno de los dos repositorios.
 
@@ -1206,7 +1204,7 @@ En la misma base de datos hay varias relaciones iguales, de muchos a uno, y que 
 * Obtener la central nuclear que originó una incidencia
 * Obtener el usuario que originó la incidencia
 
-#### @OneToMany - de uno a muchos
+### @OneToMany - de uno a muchos
 
 Si queremos bidireccionalidad en la relación, podemos usar anotaciones para indicar la relación contraria en la otra dirección. Es decir, si antes estamos obteniendo la información del rol para cada usuario, ahora podríamos obtener los usuarios que usen un determinado rol.
 

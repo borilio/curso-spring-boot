@@ -10,6 +10,5 @@
 | 03 Bootstrap y Fragmentos | [Enlace](docs/md/03-Bootstrap.md)                 | [Enlace](docs/pdf/03-Bootstrap.pdf)                 |
 | 04 REST y Servicios           | [Enlace](docs/md/04-Rest.md)                      | [Enlace](docs/pdf/04-Rest.pdf)                      |
 | 05 Spring Data                | [Enlace](docs/md/05-SpringData.md)                | [Enlace](docs/pdf/05-SpringData.pdf)                |
-| Curso completo en un archivo | Pendiente | Pendiente |
 
 💡Se recomienda usar un lector externo como [Typora](https://download.typora.io/windows/typora-update-x64-1117.exe) para el formato Markdown.
