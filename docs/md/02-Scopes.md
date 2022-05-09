@@ -125,7 +125,11 @@ En el `@RequestParam()`, si se indican más de un atributo (`name` y `required`)
 
 > 🤓Más información en https://www.baeldung.com/spring-request-param
 
-
+> 🤓Si el nombre del parámetro coincide con el nombre de la variable a la cual estamos mapeando con `@RequestParam`, podemos omitir la anotación, como en el siguiente ejemplo:
+>
+> ```java
+> public String login(String correo, String clave){...}
+> ```
 
 ------
 
