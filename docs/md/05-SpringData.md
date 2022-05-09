@@ -602,8 +602,9 @@ Vamos más allá….se puede hacer cosas tan locas como lo siguiente:
 
 ```java
 public interface UserRepo extends JpaRepository<User, Integer> {
-	public User findByUserNameStartsWithIgnoreCase(String userName);
+	public User findByUserNameStartingWithIgnoreCase(String userName);
 	public User findByEmailAndPassword(String email, String pass);
+    public boolean existsByEmailAndPassword(String email, String pass);
 	public List<User> findByIdGreaterThan(int id);
 	public List<User> findByEmailContaining(String emailParcial);
 	public List<User> findByAdminTrue();
@@ -765,7 +766,7 @@ Y ya automáticamente, al hacer una petición a `localhost:8080/usuarios` obtend
 }
 ```
 
-Y una petición a `localhost:8080/usuarios/5` obtendremos la siguiente respuesta:
+Y una petición a `localhost:8080/usuarios/8` obtendremos la siguiente respuesta:
 
 ```json
 {
@@ -911,4 +912,377 @@ Borramos el usuario nuevo:
 Cerramos sesión:
 
 ![Nuevo usuario](img/05/13.png)
+
+
+
+# Anexo
+
+🚧 En construcción. Usar con precaución 🚧
+
+## Persistencia con JPA en base de datos relacionales
+
+Este documento completo trata la persistencia de tablas independientes, que no están relacionadas con otras. En este apartado veremos como se usan en JPA una base de datos que posee relaciones entre tablas.
+
+### Proyecto inicial
+
+En el siguiente repositorio, está el proyecto completo que nos servirá de ejemplo, con commits en cada punto importante para ver el proyecto desde el inicio y los cambios realizados durante la evolución del ejemplo.
+
+> 👨‍💻 https://github.com/borilio/curso-spring-boot-ejemplo-jpa
+
+Para simplificar, no tendremos vistas y solo tendremos una API REST creada con los repositorios, por lo que no tendremos `controllers`, si no únicamente los modelos (o beans) y sus correspondientes repositorios.
+
+![Estructura del proyecto](img/05/16.png)
+
+> 👨‍💻 El proyecto tiene momentos concretos señalados, identificados por un commit a git, para que se pueda ver el código fuente de proyecto en un momento especial dado. A continuación mostramos el primer momento, por si necesitas ver el código de los modelos o de los repositorios, o de cualquier otro archivo del proyecto.
+
+> 🕰**Momento 1**: Definidos Usuarios y Roles, y sus correspondientes repositorios. 
+>
+> https://github.com/borilio/curso-spring-boot-ejemplo-jpa/tree/4bf2f8a767376108be33172ac8e4969ad0ee7d30
+
+Ahora mismo, si arrancamos el proyecto y vamos a `http://localhost:8080/api/usuarios`  nos mostrará un JSON con los usuarios:
+
+```json
+{
+    "_embedded": {
+        "usuarios": [
+            {
+                "idRol": 1,
+                "nombre": "Admin 1",
+                "correo": "admin1@empresa.com",
+                "clave": "654321",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/usuarios/1"
+                    },
+                    "usuario": {
+                        "href": "http://localhost:8080/api/usuarios/1"
+                    }
+                }
+            },
+            {
+                "idRol": 1,
+                "nombre": "Admin 2",
+                "correo": "admin2@empresa.com",
+                "clave": "654321",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/usuarios/2"
+                    },
+                    "usuario": {
+                        "href": "http://localhost:8080/api/usuarios/2"
+                    }
+                }
+            },
+            {
+                "idRol": 2,
+                "nombre": "Usuario",
+                "correo": "user@empresa.com",
+                "clave": "123456",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/usuarios/3"
+                    },
+                    "usuario": {
+                        "href": "http://localhost:8080/api/usuarios/3"
+                    }
+                }
+            },
+            {
+                "idRol": 3,
+                "nombre": "Visor",
+                "correo": "visor@empresa.com",
+                "clave": "123456",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/usuarios/4"
+                    },
+                    "usuario": {
+                        "href": "http://localhost:8080/api/usuarios/4"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/api/usuarios"
+        },
+        "profile": {
+            "href": "http://localhost:8080/api/profile/usuarios"
+        },
+        "search": {
+            "href": "http://localhost:8080/api/usuarios/search"
+        }
+    },
+    "page": {
+        "size": 20,
+        "totalElements": 4,
+        "totalPages": 1,
+        "number": 0
+    }
+}
+```
+
+E igualmente con los roles en `http://localhost:8080/api/roles`:
+
+```json
+{
+    "_embedded": {
+        "rols": [
+            {
+                "rol": "administrador",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/roles/1"
+                    },
+                    "rol": {
+                        "href": "http://localhost:8080/api/roles/1"
+                    }
+                }
+            },
+            {
+                "rol": "usuario",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/roles/2"
+                    },
+                    "rol": {
+                        "href": "http://localhost:8080/api/roles/2"
+                    }
+                }
+            },
+            {
+                "rol": "visor",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/roles/3"
+                    },
+                    "rol": {
+                        "href": "http://localhost:8080/api/roles/3"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/api/roles"
+        },
+        "profile": {
+            "href": "http://localhost:8080/api/profile/roles"
+        }
+    },
+    "page": {
+        "size": 20,
+        "totalElements": 3,
+        "totalPages": 1,
+        "number": 0
+    }
+}
+```
+
+Por ahora no hay nada nuevo, vemos como cada repositorio nos da los elementos de cada entidad, por separado sin tener en cuenta las relaciones que están definidas en la base de datos.
+
+
+
+### Esquema Entidad-Relación
+
+En el proyecto, tenemos una base de datos simple con varias relaciones, pero nos centraremos por ahora en los Usuarios y los Roles. Cada `usuario` tiene un `rol` definido en otra tabla.
+
+<img src="img/05/17.png" alt="Entidad-Relación" style="zoom:67%;" />
+
+### Obteniendo información de otras tablas
+
+Ahora mismo, con los repositorios obtenemos la información que hay en las tablas TAL CUAL. Es decir, que si obtengo la lista de usuarios, tendré un `List<Usuario>` donde cada `Usuario` tiene los atributos tal cual están definidos, por lo que podré saber la `id_rol` que tiene el usuario (1, 2, 3, etc.), pero no tendré información del nombre del `rol` (“administrador”, “visor”, “usuario”, etc.).
+
+**¿Cómo podemos obtener esa información?** Pues sustituyendo el atributo de la clave foránea por el objeto al que hace referencia en la otra tabla además de usar las anotaciones que indicamos a continuación.
+
+En nuestro ejemplo sería cambiando el atributo `id_rol`, por un objeto de la clase `Rol`, y usando las anotaciones correctas.
+
+#### @ManyToOne - de muchos a uno
+
+Como la relación entre `usuarios` y `roles` es de muchos a uno (un rol está muchas veces en la tabla `usuarios`, y una única vez en la tabla `roles`), pues debemos hacer los siguientes cambios:
+
+1. En la la clase `Usuario`, eliminamos el atributo `id_rol` y lo sustituimos por un objeto de la clase `Rol`.
+2. Le añadimos la anotación `@ManyToOne`, para indicar el tipo de relación que hay con ese atributo.
+3. Le añadimos la anotación `@JoinColumn`, para indicar los campos que se relacionan en ambas entidades. Tiene los siguientes argumentos:
+   * `name` : Le indicamos el campo de ESTA entidad que representa la clave foránea
+   * `referencedColumnName`:  Le indicamos el campo clave de la tabla a la que hace referencia.
+4. No es necesario hacer ningún cambio en la clase `Rol`, ni en ninguno de los dos repositorios.
+
+El código de la clase `Usuario` quedaría así:
+
+> 🌶 Para simplificar el código, estamos usando Lombok
+
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @ManyToOne
+    @JoinColumn(name = "id_rol", referencedColumnName = "id")
+    private Rol rol;
+    private String nombre;
+    private String correo;
+    private String clave;
+}
+```
+
+> 🕰**Momento 2**: Modificamos la clase Usuario para cambiar la `id_rol` por un objeto de la clase `Rol`. 
+>
+> https://github.com/borilio/curso-spring-boot-ejemplo-jpa/tree/13f5c9c4c6571eb0b40986c93f5c3e257d507913
+
+Usando los repositorios en cualquier parte de la aplicación (servicios, controlador, testing, etc), obtenemos el usuario con `id=1` usando la siguiente sentencia:
+
+```java
+//Obtenemos el usuario con id=1 y lo imprimimos por consola...
+System.out.println(usuariosRepo.findById(1).orElse(null));
+```
+
+**Antes**, sin usar las anotaciones y clases correspondientes, obtendríamos:
+
+````
+Usuario(id=1, id_rol=1, nombre=Admin 1, correo=admin1@empresa.com, clave=654321)
+````
+
+**Ahora**, usando las relaciones correctamente, obtenemos esto:
+
+```
+Usuario(id=1, rol=Rol(id=1, rol=administrador), nombre=Admin 1, correo=admin1@empresa.com, clave=654321)
+```
+
+Antes únicamente obtenemos `id_rol`, ahora tenemos un objeto de la clase `Rol`, relleno con todos los valores correctos para esa id concreta.
+
+Por la parte del REST, veremos los siguientes cambios:
+
+Si accedemos a `http://localhost:8080/usuarios/1`, obtendremos:
+
+```json
+{
+    "nombre": "Admin 1",
+    "correo": "admin1@empresa.com",
+    "clave": "654321",
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/api/usuarios/1"
+        },
+        "usuario": {
+            "href": "http://localhost:8080/api/usuarios/1"
+        },
+        "rol": {
+            "href": "http://localhost:8080/api/usuarios/1/rol"
+        }
+    }
+}
+```
+
+Y vemos que ahora podemos ir a `http://localhost:8080/usuarios/1/rol`, en la cual obtendremos:
+
+```json
+{
+    "rol": "administrador",
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/api/roles/1"
+        },
+        "rol": {
+            "href": "http://localhost:8080/api/roles/1"
+        }
+    }
+}
+```
+
+
+
+En la misma base de datos hay varias relaciones iguales, de muchos a uno, y que haciendo lo mismo que con los usuarios, podríamos:
+
+* Obtener los tipos de centrales nucleares
+* Obtener el nombre de la provincia de la central nuclear
+* Obtener la central nuclear que originó una incidencia
+* Obtener el usuario que originó la incidencia
+
+#### @OneToMany - de uno a muchos
+
+Si queremos bidireccionalidad en la relación, podemos usar anotaciones para indicar la relación contraria en la otra dirección. Es decir, si antes estamos obteniendo la información del rol para cada usuario, ahora podríamos obtener los usuarios que usen un determinado rol.
+
+En la tabla contraria, podemos añadirle una lista de usuarios, y automáticamente, podremos obtener los usuarios que tengan una id de rol concreta.
+
+Añadiendo la anotación `@OneToMany` decimos que “un mismo rol, lo pueden tener muchos usuarios”. Y con el argumento `mappedBy` le indicamos el atributo de la otra entidad el cual tiene que pertenecer a esta entidad (le decimos `mappedBy="rol"` porque  queremos obtener una `List<Usuario>` que tengan como atributo un determinado **`rol`**).
+
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "roles")
+public class Rol {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String rol;
+    @OneToMany(mappedBy = "rol")
+    private List<Usuario> usuarios;
+}
+```
+
+> 🕰**Momento 3:** Modificamos la clase Rol para añadir una bidireccionalidad la relación con `@OneToMany`.
+>
+> https://github.com/borilio/curso-spring-boot-ejemplo-jpa/tree/2b91a3a0f324681be3956d39639fc4f78523406d
+
+Ahora podemos hacer la petición `http://localhost:8080/api/roles/1/usuarios` y nos mostrará un JSON con los **usuarios que tengan el rol con id 1**:
+
+```json
+{
+    "_embedded": {
+        "usuarios": [
+            {
+                "nombre": "Admin 1",
+                "correo": "admin1@empresa.com",
+                "clave": "654321",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/usuarios/1"
+                    },
+                    "usuario": {
+                        "href": "http://localhost:8080/api/usuarios/1"
+                    },
+                    "rol": {
+                        "href": "http://localhost:8080/api/usuarios/1/rol"
+                    }
+                }
+            },
+            {
+                "nombre": "Admin 2",
+                "correo": "admin2@empresa.com",
+                "clave": "654321",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/usuarios/2"
+                    },
+                    "usuario": {
+                        "href": "http://localhost:8080/api/usuarios/2"
+                    },
+                    "rol": {
+                        "href": "http://localhost:8080/api/usuarios/2/rol"
+                    }
+                }
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "http://localhost:8080/api/roles/1/usuarios"
+        }
+    }
+}
+```
+
+> ⚠ No podremos probar este tipo de relaciones en testing, ya que al no tener una sesión creada provocará una excepción del tipo `org.hibernate.LazyInitializationException`
+
+
 
