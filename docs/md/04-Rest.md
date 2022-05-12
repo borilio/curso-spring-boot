@@ -157,7 +157,7 @@ Ya podemos usar de una forma simple y eficiente los servicios de `ArticuloServic
 
 ⚠**Atención:** Un “error” muy común es querer inyectar un objeto de la clase con la implementación de la interfaz . Hay que **inyectar la interfaz del servicio**, y Spring hará todo el trabajo de crear una única instancia del objeto que implementa esa interfaz. En nuestro ejemplo lo correcto sería inyectar `ArticulosService`, y no `ArticulosServiceImpl`. De hecho, funcionará de ambas maneras, pero es una buena práctica codificar las interfaces en general, por el mismo motivo por el que se hace `List<Articulo> lista = new ArrayList<Articulo>()`.
 
-> 🤓Técnicamente, el alcance de todas las anotaciones de Spring (`@Service`, `@Controller`, etc.) es un *Singleton*. Eso es otro patrón de diseño que consiste que crear una única instancia del objeto, que es la que se inyecta. De forma que no estamos creando múltiples instancias del mismo objeto en cada método.
+> 🤓Técnicamente, el alcance de todas las anotaciones de Spring (`@Service`, `@Controller`, etc.) es un *Singleton*. Eso es otro patrón de diseño que consiste en crear una única instancia del objeto, que es la que se inyecta. De forma que no estamos creando múltiples instancias del mismo objeto en cada método.
 
 # REST
 
