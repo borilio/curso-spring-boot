@@ -497,7 +497,7 @@ Hacer una aplicación Spring Boot MVC (Spring Starter Proyect) que tenga:
 
 **Tendrá el siguiente POJO:**
 
-- `User.java`. En la siguiente imagen se detallan los atributos (rojo) y métodos (verde). El método `comprobarAlgo()` devuelve de forma aleatoria o un true o un false.
+- `User.java`. En la siguiente imagen se detallan los atributos (rojo) y métodos (verde). El método `comprobarAlgo()` devuelve un true si la id es par, o un false en caso contrario. De esta forma, todas las llamadas al método siempre darán el mismo resultado.
 - ![Clase User](img/01/05.png)
 
 **Tendrá los siguientes controladores:**
