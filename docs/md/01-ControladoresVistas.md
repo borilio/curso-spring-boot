@@ -502,12 +502,12 @@ Hacer una aplicación Spring Boot MVC (Spring Starter Proyect) que tenga:
 
 **Tendrá los siguientes controladores:**
 
-- `HomeController` -> URL Mapeada `/` : Nos redirige inicialmente a home.html directamente.
-- `ListadosController` -> URL Mapeada /listados : Creará un `ArrayList` de Objetos `User`. Los usuarios se crearán manualmente (5 ó 6). Se añaden también manualmente al ArrayList y se lo enviará a la vista `listado.html`. 
+- `HomeController` -> URL Mapeada `/` : Nos redirige inicialmente a `home.html` directamente.
+- `ListadosController` -> URL Mapeada `/listados` : Creará un `ArrayList` de Objetos `User`. Los usuarios se crearán manualmente (5 ó 6). Se añaden también manualmente al ArrayList y se lo enviará a la vista `listado.html`. 
 
 ✔En la vista `listado.html` se mostrará en una tabla HTML, visualizando cada elemento del ArrayList (usuario) en una fila. 
 
-✔En la última columna usar el resultado que nos devuelva el método `comprobarAlgo()`, para mostrar SI o NO (`true` o `false` respectivamente). Se puede usar un icono, imagen, emoji (✅❎) o simple texto, como quieras, pero no podrá salir true o false directamente.
+✔En la última columna usar el resultado que nos devuelva el método `comprobarAlgo()`, para mostrar SI o NO (`true` o `false` respectivamente). Se puede usar un icono, imagen, emoji (✅❎) o simple texto, como quieras, pero no podrá salir `true` o `false` directamente.
 
 ✔Mostraremos en algún sitio del listado, donde te parezca más oportuno, el número de elementos que tiene la tabla (número de usuarios que hay en la lista).
 
