@@ -179,8 +179,8 @@ Crear un proyecto nuevo Spring Boot, con las dependencias de `Spring MVC` y `Thy
 - Cada enlace llevará a dos vistas, `cuadrado.html` y `rectangulo.html`. Ambas estarán en una carpeta llamada `/pages` en la carpeta donde van las vistas.
 - Para dirigir desde un controlador a las vistas que queremos, vamos a crear un **nuevo controlador** llamado `FormasController`. Podríamos hacerlo en el mismo `HomeController`, pero así hacemos nuestro programa más escalable.
 - Las rutas para ir a las vistas serán:
-  - Para ir a cuadrado.html usaremos la url /formas/cuadrado
-  - Para ir a rectangulo.html usaremos la url /formas/rectangulo
+  - Para ir a `cuadrado.html` usaremos la url `/formas/cuadrado`.
+  - Para ir a `rectangulo.html` usaremos la url `/formas/rectangulo`.
   - 💡Se pueden crear *mappings* parciales asignando un parte de la ruta al controlador, y otra parte al método. `/formas`, `/cuadrado` y `/rectangulo`, en lugar de `/formas/cuadrado` y `/formas/rectangulo`. Sería una buena idea hacerlo aquí.
   - 💡Prueba primero las rutas a mano en el navegador, y cuando funcione usa esas urls para los enlaces.
   - 💡Experimenta con `@RequestMapping` y `@GetMapping`.
@@ -214,7 +214,7 @@ model.addAttribute("nombre", usuario);
 
 ```html
 <!-- Desde HTML -->
-<p th:text="${nombre}">El contenido será eliminado</p>
+<p th:text="${nombre}">El contenido del pára será eliminado</p>
 ```
 
 Como valor del atributo, `th:text` usa *Expression Language* (EL). En resumen, se usa la sintaxis `${ }` y se evalúa la expresión de su interior. Puede ser el contenido de una variable u otra expresión más compleja. Por ejemplo `${nombre.toLowerCase() + '!!!' }`
@@ -364,7 +364,7 @@ En la vista:
         <td th:text="${articulo.cantidad}"></td>
         <td th:text="${articulo.descripcion}"></td>
         <td th:text="${articulo.precio}"></td>
-        <th th:text="${articulo.cantidad * articulo.precio + '€'}"></th>
+        <td th:text="${articulo.cantidad * articulo.precio + '€'}"></td>
     </tr>
 </table>
 ```
@@ -384,31 +384,31 @@ Generaría el siguiente HTML final:
         <td>1</td>
         <td>Agua Chumicero 1.5L</td>
         <td>0.7</td>
-        <th>0.7€</th>
+        <td>0.7€</td>
     </tr>
     <tr>
         <td>2</td>
         <td>Refresco con gas sabor cola</td>
         <td>1.35</td>
-        <th>2.7€</th>
+        <td>2.7€</td>
     </tr>
     <tr>
         <td>3</td>
         <td>Campero Pollo y Bacon XXL</td>
         <td>6.0</td>
-        <th>18.0€</th>
+        <td>18.0€</td>
     </tr>
     <tr>
         <td>4</td>
         <td>Pizza Barbacoa</td>
         <td>7.0</td>
-        <th>28.0€</th>
+        <td>28.0€</td>
     </tr>
     <tr>
         <td>5</td>
         <td>Ración Patatas fritas</td>
         <td>3.2</td>
-        <th>16.0€</th>
+        <td>16.0€</td>
     </tr>
 </table>
 ```

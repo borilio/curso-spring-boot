@@ -132,7 +132,7 @@ Vamos a ver los pasos usando Spring Tool Suite 4.
 
 ## Estructura de proyecto
 
-Nos habrá creado una proyecto con la siguiente estructura:
+Nos habrá creado una proyecto con la siguiente estructura: 
 
 ![Estructura de proyecto](img/00/06.png)
 
