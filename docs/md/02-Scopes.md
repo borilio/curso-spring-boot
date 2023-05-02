@@ -50,7 +50,7 @@ Veamos exactamente el mismo ejemplo anterior, pero usando la anotación `@Reques
 
 ```java
 @GetMapping("/usuario/validar")
-public String validarUser( 
+public String validarUser(
     @RequestParam("nombre") String nombre, 
     @RequestParam("pass") String pass
 ){
@@ -71,7 +71,7 @@ Así podemos recuperar parámetros de la petición directamente, ya vengan de un
 
 - No hace falta inyectar el `HttpServletRequest` para después usar el método `.getParameter()`. Directamente extraemos los parámetros y se “vuelcan” en la variable que le digamos (`nombre` y `pass` en este caso).
 
-- El método `request.getParameter()` SIEMPRE devuelve un String, por lo que si recibimos un número, deberemos hacer la conversión explícita manualmente. Con `@RequestParam`, podemos volcar el contenido de un parámetro en **una variable del tipo primitivo** que queramos, y se realizará la conversión de tipo automáticamente, como veremos en el siguiente ejemplo. Se deberán usar clases envoltorio en lugar de variables de tipo primitivo, para poder albergar un `null` en algunos casos (un primitivo no puede valer `null`, un objeto de una clase envoltorio si.
+- El método `request.getParameter()` SIEMPRE devuelve un String, por lo que si recibimos un número, deberemos hacer la conversión explícita manualmente. Con `@RequestParam`, podemos volcar el contenido de un parámetro en **una variable del tipo que queramos**, y se realizará la conversión de tipo automáticamente, como veremos en el siguiente ejemplo. Se deberán usar clases envoltorio en lugar de variables de tipo primitivo, para poder albergar un `null` en algunos casos (un primitivo no puede valer `null`, un objeto de una clase envoltorio si).
 
 - Si el nombre del parámetro coincide con el nombre de la variable, podemos omitir el nombre del parámetro. Si no coincidiera entonces es cuando usaríamos los paréntesis indicando ambos identificadores. Ejemplo:
 
@@ -128,7 +128,7 @@ En el `@RequestParam()`, si se indican más de un atributo (`name` y `required`)
 > 🤓Si el nombre del parámetro coincide con el nombre de la variable a la cual estamos mapeando con `@RequestParam`, podemos omitir la anotación, como en el siguiente ejemplo:
 >
 > ```java
-> public String login(String correo, String clave){...}
+> public String login(Integer id, String correo, String clave){...}
 > ```
 
 ------
