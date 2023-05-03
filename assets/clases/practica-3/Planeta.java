@@ -1,4 +1,4 @@
-package com.example.practica3.pojos;
+package com.ejemplo.practica3.pojos;
 
 import java.util.Random;
 
