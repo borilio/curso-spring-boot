@@ -138,7 +138,7 @@ En el `@RequestParam()`, si se indican más de un atributo (`name` y `required`)
 Hacer una aplicación Spring Web que haga lo siguiente:
 
 - Usar la clase [Planeta del repositorio del curso](https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-3) e incluirla en el proyecto dentro de un paquete llamado pojos.
-- El controlador principal, nos llevará a una página inicial que es un formulario que tiene
+- El controlador principal, nos llevará a una página inicial que es un formulario que tiene:
   - Un cuadro de texto normal con el nombre de la galaxia que vamos a crear.
   - Un cuadro de texto (de tipo number con límite inferior y superior, mínimo 1, máximo 1.500) para introducir el número de planetas que queremos crear.
 - El formulario enviará la información por método `GET` a la url `/crear` .
@@ -157,7 +157,7 @@ Hacer una aplicación Spring Web que haga lo siguiente:
 # @PathVariable. Obtener parámetros con url amigables
 
 ```java
-@GetMapping("borrar/{id}")
+@GetMapping("/borrar/{id}")
 public String borrar(@PathVariable Integer id){
     //Vamos a borrar un usuario por id recibida
     BaseDatos db = new BaseDatos();
@@ -168,7 +168,7 @@ public String borrar(@PathVariable Integer id){
 }
 ```
 
-Si antes usábamos `/borrar?id=3` para enviar un parámetro a un recurso, ahora podemos usar `/borrar/3` para obtener el mismo resultado. Solo tendríamos que cambiar la forma en la que recibimos la variable, `@PathVariable` en lugar de con `@RequestParam`. 
+Si antes usábamos `/borrar?id=3` para enviar un parámetro a un recurso, ahora podemos usar `/borrar/3` para obtener el mismo resultado. Solo tendríamos que cambiar la forma en la que recibimos la variable, `@PathVariable` en lugar de con `@RequestParam`.
 
 Spring se encargará de capturar el valor que esté entre llaves `{id}` y colocar en otra variable que nosotros le indiquemos en la firma del método. En el ejemplo anterior, haríamos una consulta a la url `/borrar/3`, de forma que el `3` lo captura, mete el valor dentro de la variable `Integer id`, y después la usa en el método de la forma que quiera.
 
