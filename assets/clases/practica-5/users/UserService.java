@@ -7,7 +7,7 @@ public class UserService {
 	
 	/**
 	 * Valida un usuario bajo un estricto y complejo procedimiento :)
-	 * @param usuario
+	 * @param usuario Objeto de la clase User que queremos validar
 	 * @return true si el usuario es válido, o false en caso contrario.
 	 */
 	public boolean validar(User usuario) {
