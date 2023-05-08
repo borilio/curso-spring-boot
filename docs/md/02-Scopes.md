@@ -266,7 +266,7 @@ server.servlet.session.timeout=10m
 
 Así se indicaría que se necesitan 10 minutos de inactividad para el cierre de sesión automática por parte del servidor. Si no se indica ningún sufijo de tiempo, la cantidad se usará en segundos. 
 
-> **Nota:** Para una lista completa de configuraciones que se pueden aplicar al servidor en el `application.properties`, mirar en https://docs.spring.io/spring-boot/docs/2.6.x/reference/html/application-properties.html#application-properties.server
+> **Nota:** Para una lista completa de configuraciones que se pueden aplicar al servidor en el `application.properties`, mirar en https://docs.spring.io/spring-boot/docs/3.0.x/reference/html/application-properties.html#application-properties.server
 
 Veamos un ejemplo muy usado para el ámbito de la sesión, que sería guardar el usuario activo:
 
@@ -280,7 +280,7 @@ public String validar(HttpSession session){
         session.setAttribute("usuarioActivo", usuario);
         return "home";
     } else {
-        return "login"
+        return "login";
     }
 }
 
@@ -323,7 +323,7 @@ Una vez visto como lo guardamos desde el controlador en la sesión, veremos como
 
 ```html
 <h3>Validar usuario</h3>
-<div th:if="${session.user}">
+<div th:if="${session.user}"> 
     <p>Bienvenido, [[${session.user.nombre}]]</p>
     <p>SessionID: [[${#session.id}]]</p>
 </div>
