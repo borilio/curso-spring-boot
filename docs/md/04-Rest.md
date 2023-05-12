@@ -130,7 +130,9 @@ public class ArticulosServiceImpl implements ArticulosService {
 }
 ```
 
-Ahora necesitamos en el controlador donde usemos el servicio, una instancia del objeto de la clase `ArticulosServiceImpl` y se hace usando la inyección de dependencias. Usando la anotación **`@Autowired`** sobre la **interfaz** `ArticulosService`, Spring inyectará un objeto que implemente dicha interfaz. 
+Ahora necesitamos en el controlador donde usemos el servicio, una instancia del objeto de la clase `ArticulosServiceImpl` y se hace usando la inyección de dependencias. Podemos hacerlo usando la anotación **`@Autowired`** sobre un atributo o sobre un constructor. Veamos las dos formas:
+
+**Inyección por atributo (desaconsejada)**
 
 ```java
 @Controller
@@ -146,7 +148,7 @@ public class APIController {
 			Model model
 			) {
 		Articulo a = articuloService.getArticuloById(id);
-		model.addAttribute("listaArticulos", a);
+		model.addAttribute("articulo", a);
 		return "ficha-articulo";	
 	}
     ...
@@ -154,6 +156,42 @@ public class APIController {
 ```
 
 Ya podemos usar de una forma simple y eficiente los servicios de `ArticuloService` en todos los métodos del controlador, sin tener que inyectarlo método por método.
+
+**Inyección por constructor (recomendada)**
+
+Se recomienda hacer la **inyección por constructor**, ya que se considera una buena práctica puesto que garantiza que el servicio esté disponible desde el momento en que se crea la instancia del controlador. Además hace que la clase sea más fácil de testear y reduce el acoplamiento entre el controlador y el servicio. 
+
+```java
+@Controller
+@RequestMapping("/api")
+public class APIController {
+	
+	private final ArticulosService articuloService;
+	
+    @Autowired
+    public APIController(ArticuloService articuloService) {
+        this.articuloService = articuloService;
+    }
+    
+	@GetMapping("/articulo/{id}")
+	public String getArticuloPorId(
+			@PathVariable Integer id,
+			Model model
+			) {
+		Articulo a = articuloService.getArticuloById(id);
+		model.addAttribute("articulo", a);
+		return "ficha-articulo";	
+	}
+    ...
+}	
+```
+
+> 💡En el caso de la inyección de dependencias, al declarar el atributo como `final`, estamos asegurándonos de que el objeto asignado por el contenedor de Spring no será reemplazado por otro en ningún momento, lo que puede ser importante para el correcto funcionamiento de la aplicación. Además, nos obliga a asignar el valor del atributo en el constructor, lo que hace que el código sea más legible y fácil de entender.
+>
+> 🤓 La anotación `@Autowired` la cambiamos del atributo al constructor. Aunque en las últimas versiones de Spring es opcional, ya que se considera implícitamente.
+
+
+
 
 ⚠**Atención:** Un “error” muy común es querer inyectar un objeto de la clase con la implementación de la interfaz . Hay que **inyectar la interfaz del servicio**, y Spring hará todo el trabajo de crear una única instancia del objeto que implementa esa interfaz. En nuestro ejemplo lo correcto sería inyectar `ArticulosService`, y no `ArticulosServiceImpl`. De hecho, funcionará de ambas maneras, pero es una buena práctica codificar las interfaces en general, por el mismo motivo por el que se hace `List<Articulo> lista = new ArrayList<Articulo>()`.
 
