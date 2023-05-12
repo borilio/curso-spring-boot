@@ -39,43 +39,43 @@ public interface ArticulosService {
 
 ```java
 public class ArticulosServiceImpl implements ArticulosService {
-	
-	@Override
-	public Articulo getArticuloAleatorio() {
-		Random r = new Random();
-		int id = Math.abs(r.nextInt());
-		int cantidadRandom = r.nextInt(10)+1;
-		double precioRandom = r.nextDouble(50);
-		boolean congeladoRandom = r.nextBoolean();
-		
-		return new Articulo(id, cantidadRandom, "Artículo nº" + id, precioRandom, congeladoRandom);
-	}
 
-	@Override
-	public Articulo getArticuloById(Integer id) {
-		//Generamos uno al azar y le ponemos la id recibida
-		Articulo articuloCreado = this.getArticuloAleatorio();
-		articuloCreado.setId(id); 
-		articuloCreado.setDescripcion("Artículo nº" + id);
-		
-		return articuloCreado;
-	}
-	
-	@Override
-	public List<Articulo> getArticulos(int numero) {
-		//Generamos una lista con tantos artículos nos hayan pedido
-		List<Articulo> lista = new ArrayList<Articulo>();
-		for (int i=0; i<=numero-1; i++) {
-			lista.add(this.getArticuloAleatorio());
-		}
-		return lista;
-	}
+    @Override
+    public Articulo getArticuloAleatorio() {
+        Random r = new Random();
+        int id = Math.abs(r.nextInt());
+        int cantidadRandom = r.nextInt(10)+1;
+        double precioRandom = r.nextDouble(50);
+        boolean congeladoRandom = r.nextBoolean();
 
-	@Override
-	public List<Articulo> getArticulosByDescripcion(String descripcion) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return new Articulo(id, cantidadRandom, "Artículo nº" + id, precioRandom, congeladoRandom);
+    }
+
+    @Override
+    public Articulo getArticuloById(Integer id) {
+        //Generamos uno al azar y le ponemos la id recibida
+        Articulo articuloCreado = this.getArticuloAleatorio();
+        articuloCreado.setId(id); 
+        articuloCreado.setDescripcion("Artículo nº" + id);
+
+        return articuloCreado;
+    }
+
+    @Override
+    public List<Articulo> getArticulos(int numero) {
+        //Generamos una lista con tantos artículos nos hayan pedido
+        List<Articulo> lista = new ArrayList<Articulo>();
+        for (int i=0; i<=numero-1; i++) {
+            lista.add(this.getArticuloAleatorio());
+        }
+        return lista;
+    }
+
+    @Override
+    public List<Articulo> getArticulosByDescripcion(String descripcion) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
 ```
 
@@ -89,8 +89,8 @@ Si queremos añadir funcionalidades al servicio, habría que añadirle un nuevo 
 
 ```java
 public interface ArticulosService {
-	...
-	public boolean deleteArticulo(int id); //Añadimos un nuevo método para borrar un artículo
+    ...
+        public boolean deleteArticulo(int id); //Añadimos un nuevo método para borrar un artículo
 }
 ```
 
@@ -104,14 +104,12 @@ Al hacer clic en la opción de “*Add unimplemented methods*” nos heredará a
 
 ```java
 public class ArticulosServiceImpl implements ArticulosService {
-
-    ...
-        
+	...
 	@Override
-	public boolean deleteArticulo(int id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+public boolean deleteArticulo(int id) {
+// TODO Auto-generated method stub
+return false;
+}
 }
 ```
 
@@ -126,7 +124,7 @@ Spring nos facilita el uso de los servicios con la anotación **`@Service`**. As
 ```java
 @Service
 public class ArticulosServiceImpl implements ArticulosService {
-	...
+    ...
 }
 ```
 
@@ -138,19 +136,19 @@ Ahora necesitamos en el controlador donde usemos el servicio, una instancia del 
 @Controller
 @RequestMapping("/api")
 public class APIController {
-	
-	@Autowired
-	private ArticulosService articuloService;
-	
-	@GetMapping("/articulo/{id}")
-	public String getArticuloPorId(
-			@PathVariable Integer id,
-			Model model
-			) {
-		Articulo a = articuloService.getArticuloById(id);
-		model.addAttribute("articulo", a);
-		return "ficha-articulo";	
-	}
+
+    @Autowired
+    private ArticulosService articuloService;
+
+    @GetMapping("/articulo/{id}")
+    public String getArticuloPorId(
+        @PathVariable Integer id,
+        Model model
+    ) {
+        Articulo a = articuloService.getArticuloById(id);
+        model.addAttribute("articulo", a);
+        return "ficha-articulo";	
+    }
     ...
 }	
 ```
@@ -165,23 +163,23 @@ Se recomienda hacer la **inyección por constructor**, ya que se considera una b
 @Controller
 @RequestMapping("/api")
 public class APIController {
-	
-	private final ArticulosService articuloService;
-	
+
+    private final ArticulosService articuloService;
+
     @Autowired
     public APIController(ArticuloService articuloService) {
         this.articuloService = articuloService;
     }
-    
-	@GetMapping("/articulo/{id}")
-	public String getArticuloPorId(
-			@PathVariable Integer id,
-			Model model
-			) {
-		Articulo a = articuloService.getArticuloById(id);
-		model.addAttribute("articulo", a);
-		return "ficha-articulo";	
-	}
+
+    @GetMapping("/articulo/{id}")
+    public String getArticuloPorId(
+        @PathVariable Integer id,
+        Model model
+    ) {
+        Articulo a = articuloService.getArticuloById(id);
+        model.addAttribute("articulo", a);
+        return "ficha-articulo";	
+    }
     ...
 }	
 ```
@@ -263,84 +261,84 @@ En los siguientes ejemplos, usaremos la siguiente clase **Articulo.java**, por l
 
 ```java
 public class Articulo {
-	//Atributos
-	private long id;
-	private int cantidad;
-	private String descripcion;
-	private double precio;
-	private boolean congelado;
-	
-	//Constructores
-	public Articulo() {}
+    //Atributos
+    private long id;
+    private int cantidad;
+    private String descripcion;
+    private double precio;
+    private boolean congelado;
 
-	public Articulo(long id, int cantidad, String descripcion, double precio, boolean congelado) {
-		super();
-		this.id = id;
-		this.cantidad = cantidad;
-		this.descripcion = descripcion;
-		this.precio = precio;
-		this.congelado = congelado;
+    //Constructores
+    public Articulo() {}
+
+    public Articulo(long id, int cantidad, String descripcion, double precio, boolean congelado) {
+        super();
+        this.id = id;
+        this.cantidad = cantidad;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.congelado = congelado;
     }
-    
+
     public Articulo(int cantidad, String descripcion, double precio) {
-		super();
-		this.id = 0;
-		this.cantidad = cantidad;
-		this.descripcion = descripcion;
-		this.precio = precio;
-		this.congelado = false;
-	}
+        super();
+        this.id = 0;
+        this.cantidad = cantidad;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.congelado = false;
+    }
 
-	//Métodos
-	public long getId() {
-		return id;
-	}
+    //Métodos
+    public long getId() {
+        return id;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
-	
-	public int getCantidad() {
-		return cantidad;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
-	}
+    public int getCantidad() {
+        return cantidad;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public double getPrecio() {
-		return precio;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public void setPrecio(double precio) {
-		this.precio = precio;
-	}
+    public double getPrecio() {
+        return precio;
+    }
 
-	public boolean isCongelado() {
-		return congelado;
-	}
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
 
-	public void setCongelado(boolean requiereFrio) {
-		this.congelado = requiereFrio;
-	}
+    public boolean isCongelado() {
+        return congelado;
+    }
 
-	@Override
-	public String toString() {
-		return "Articulo [id=" + id + 
-				", cantidad=" + cantidad + 
-				", descripcion=" + descripcion + 
-				", precio=" + precio + 
-				", congelado=" + congelado + 
-				"]";
-	}
+    public void setCongelado(boolean requiereFrio) {
+        this.congelado = requiereFrio;
+    }
+
+    @Override
+    public String toString() {
+        return "Articulo {id=" + id + 
+            ", cantidad=" + cantidad + 
+            ", descripcion=" + descripcion + 
+            ", precio=" + precio + 
+            ", congelado=" + congelado + 
+            "}";
+    }
 }
 ```
 
@@ -357,7 +355,7 @@ Para añadir la librería, añadiremos las siguientes líneas al `pom.xml` de Ma
 <dependency>
     <groupId>org.projectlombok</groupId>
     <artifactId>lombok</artifactId>
-    <version>1.18.22</version>
+    <version>1.18.26</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -377,21 +375,16 @@ Las más usadas son:
 Usando todos las anotaciones anteriores, la clase Articulo creada anteriormente se podría quedar con el siguiente código:
 
 ```java
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor @NoArgsConstructor
 @ToString @EqualsAndHashCode
+@Getter @Setter
 public class Articulo {
-	@Getter @Setter
-	private long id;
-	@Getter @Setter
+    private long id;
 	private int cantidad;
-	@Getter @Setter
     private String descripcion;
-	@Getter @Setter
-    private double precio;
-	@Getter @Setter
-    private boolean congelado;
-	
+	private double precio;
+	private boolean congelado;
+	   
     public Articulo(int cantidad, String descripcion, double precio) {
 		super();
 		this.id = 0;
@@ -403,7 +396,7 @@ public class Articulo {
 }
 ```
 
-✨De 80 líneas ha pasado a 24. Y se podrían quedar en menos usando la anotación `@Data`.
+✨De 80 líneas ha pasado a 19. Y se podrían quedar en menos usando la anotación `@Data`.
 
 💡Podéis encontrar más información en https://javatodev.com/lombok-spring-boot/.
 
@@ -417,8 +410,9 @@ La anotación `@ResponseBody` le indica a un controlador que el objeto que retor
 @Controller
 @RequestMapping("/api")
 public class APIController {
-	@Autowired
-	ArticulosService articulosService;
+	public final ArticulosService articulosService;
+    
+    public APIController(ArticulosService articulosService){}
 
     ...
         
@@ -508,7 +502,7 @@ public class APIController {
 
 Hacer un proyecto Spring Boot, con un REST de usuarios funcional como el siguiente. El servicio será un mock que actuará sobre una colección.
 
-![x](img/04/02.png)
+![Vista pre](img/04/02.png)
 
 En https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-6 encontrarás los siguientes recursos para reutilizar:
 
