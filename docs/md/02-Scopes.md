@@ -239,16 +239,13 @@ public String logout(HttpServletRequest request) {
 **Desde la vista**
 
 ```html
-<p th:text="${#request.getAttribute('usuario')}"></p>
 <p th:text="${request.usuario}"></p>
 <p th:text="${usuario}"></p> <!-- Lo encontrará igualmente -->
 ```
 
-En el primer ejemplo, usamos el símbolo almohadilla `#` porque así accedemos al objeto directamente, y así sería la forma de poder usar sus métodos tal y como lo haríamos en java. 
+En el primer ejemplo, referenciamos el objeto que está en el scope del request. Si fuese un objeto con más atributos podríamos poner `${request.usuario.nombre}` 
 
-En el segundo ejemplo, no usamos ningún carácter porque estamos accediendo a un "attribute" que está en el objeto (sin usar el `getAttributte()`. Si fuese un objeto con más atributos podríamos poner `${request.usuario.nombre}` 
-
-En el tercer ejemplo, no se le indica el ámbito al objeto, pero igualmente lo encontrará. Primero buscará en `request`, después en `session` y después en `application`. Aunque es una buena práctica indicar explícitamente dónde está el objeto, para evitar accesos erróneos inesperados.
+En el segundo ejemplo, no se le indica el ámbito al objeto, pero igualmente lo encontrará. Primero buscará en `request`, después en `session` y después en `application`. Aunque es una buena práctica indicar explícitamente dónde está el objeto, para evitar accesos erróneos inesperados.
 
 En JavaEE, al trabajar con servlets, siempre estaba el objeto request (`HttpServletRequest`) en los `doGet` y `doPost`, por lo que así es como se enviaban objetos de unos recursos a otros. En **Spring tenemos el `model`, lo cual es más apropiado y liviano que inyectar todo el request completo**, el cual tiene mucha más información que puede que no necesitemos. Pero si nos hiciese falta por cualquier motivo así se usaría.
 
@@ -325,7 +322,6 @@ Una vez visto como lo guardamos desde el controlador en la sesión, veremos como
 <h3>Validar usuario</h3>
 <div th:if="${session.user}"> 
     <p>Bienvenido, [[${session.user.nombre}]]</p>
-    <p>SessionID: [[${#session.id}]]</p>
 </div>
 <div th:unless="${session.user}">
     <p>No hay usuario en la sesión</p>
@@ -426,13 +422,21 @@ Al entrar en la url `/registrar-visita`, lo primero que hacemos es recuperar un 
 
 Recuperamos ese valor y lo mostramos como queramos.
 
-💡 Con el applicationScope no podemos inyectar el objeto `ServletContext` en el método, como hemos visto con el Request o Session. Sin embargo, la técnica de usar el objeto como atributo del controlador usando la anotación `@Autowired` sí que podemos usarla en otros objetos de Spring (los ya vistos y otros que veremos, como los repositorios o servicios). Sólo hay que poner la anotación justo encima de la declaración de cada atributo y Spring hará el resto de la magia. Como cualquier atributo de una clase de Java, estará disponible para todos los métodos del controlador, sin necesidad de tener que inyectarlo en cada uno de los métodos que lo necesitemos.
+> 💡 Con el applicationScope no podemos inyectar el objeto `ServletContext` en el método, como hemos visto con el `Request` o `Session`. Sin embargo, la técnica de usar el objeto como atributo del controlador usando la anotación `@Autowired` sí que podemos usarla en otros objetos de Spring (los ya vistos y otros que veremos, como los repositorios o servicios). Véase el siguiente apartado de Inyección de dependencias.
+
+# Inyección de dependencias
+
+Si queremos usar un objeto del tipo `HttpSession`, `ServletContext`, `Request` u otros que veremos más adelante como servicios o repositorios, podemos definirlo como atributo de la clase controlador, para tenerlo disponible en todos los métodos del controlador, sin necesidad de tener que inyectarlo en cada uno de los métodos que lo necesitemos.
+
+Esto se puede hacer usando la inyección de dependencias con la anotación `@Autowired`, ya sea en los atributos o usando los constructores:
+
+**Inyección usando atributos (desaconsejada)**
 
 ```java
 @Controller
 public class HomeController {
     @Autowired
-    private ServletContext context;
+    private ServletContext app;
 
     @Autowired
     private HttpSession session;
@@ -445,3 +449,29 @@ public class HomeController {
 }//Fin HomeController
 ```
 
+Esta forma es válida, pero se desaconseja su uso debido a que es menos flexible y más difícil de testear. Se recomienda la inyección a través del constructor.
+
+**Inyección usando constructor (recomendada)**
+
+Se recomienda hacer la **inyección por constructor**, ya que se considera una buena práctica puesto que garantiza que el objeto esté disponible desde el momento en que se crea la instancia del controlador. Además hace que la clase sea más fácil de testear y reduce el acoplamiento entre el controlador y el objeto. 
+
+```java
+@Controller
+public class HomeController {
+    private final ServletContext app;
+    private final HttpSession session;
+    
+    @Autowired
+    public HomeController(ServletContext app, HttpSession session) {
+        this.app = app;
+        this.session = session;
+    }
+    
+    . . .
+        
+}//Fin HomeController
+```
+
+> 💡En el caso de la inyección de dependencias, al declarar el atributo como `final`, estamos asegurándonos de que el objeto asignado por el contenedor de Spring no será reemplazado por otro en ningún momento, lo que puede ser importante para el correcto funcionamiento de la aplicación. Además, nos obliga a asignar el valor del atributo en el constructor, lo que hace que el código sea más legible y fácil de entender.
+>
+> 🤓 La anotación `@Autowired` la cambiamos del atributo al constructor. Aunque en las últimas versiones de Spring es opcional, ya que se considera implícitamente.
