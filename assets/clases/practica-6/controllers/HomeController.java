@@ -13,8 +13,11 @@ import com.ejemplo.practica6.users.UserService;
 @Controller
 public class HomeController {
 
-	@Autowired
-	UserService userService;
+	private final UserService userService;
+
+	public HomeController(UserService userService){
+		this.userService = userService;
+	}
 	
 	@RequestMapping("/")
 	public String home() {
