@@ -72,7 +72,7 @@ Vamos a suponer el siguiente trozo de código, que nos ha quedado tan bonito que
 
 ```html
 <footer class="fixed-bottom bg-dark text-light p-3">
-    <div class="float-end small">Copyright Salva'21</div>
+    <div class="float-end small">Copyright Salva'23</div>
 </footer>
 ```
 
@@ -82,7 +82,7 @@ Vamos a suponer el siguiente trozo de código, que nos ha quedado tan bonito que
 
    ```html
    <footer th:fragment="pie-pagina" class="fixed-bottom bg-dark text-light p-3">
-       <div class="float-end small">Copyright by Salva'21</div>
+       <div class="float-end small">Copyright by Salva'23</div>
    </footer>
    ```
 
@@ -106,7 +106,7 @@ Vamos a suponer el siguiente trozo de código, que nos ha quedado tan bonito que
        </nav>
    
        <footer th:fragment="pie-pagina" class="fixed-bottom bg-dark text-light p-3">
-           <div class="float-end small">Copyright by Salva'21</div>
+           <div class="float-end small">Copyright by Salva'23</div>
        </footer>
    </body>
    
@@ -131,7 +131,7 @@ Ambos atributos son muy parecidos y se usan de forma similar. Se diferencian en 
 La sintaxis sería la siguiente:
 
 ```html
-<etiqueta th:insert="ruta/archivo :: nombre-fragment"></etiqueta>
+<etiqueta th:insert="trozos/archivo :: nombre-fragment"></etiqueta>
 <etiqueta th:replace="ruta/archivo :: nombre-fragment"></etiqueta>
 ```
 
