@@ -106,10 +106,10 @@ Al hacer clic en la opción de “*Add unimplemented methods*” nos heredará a
 public class ArticulosServiceImpl implements ArticulosService {
 	...
 	@Override
-public boolean deleteArticulo(int id) {
-// TODO Auto-generated method stub
-return false;
-}
+	public boolean deleteArticulo(int id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
 ```
 
@@ -566,7 +566,7 @@ GET localhost:8080/api/usuarios
 
 ## POST
 
-El método `POST` se utiliza para enviar una entidad a un recurso específico. Aunque se pueda usar `GET` para enviar datos, tiene muchas limitaciones que `POST` no tiene. Su fin es más genérico, envía información para que quién la reciba haga lo que estime con ella. `POST` no es idempotente. Una nueva petición POST tendría  un efecto distinto que la primera llamada (por ejemplo, dos peticiones seguidas insertarían 2 usuarios en la base de datos).
+El método `POST` se utiliza para enviar una entidad a un recurso específico. Aunque se pueda usar `GET` para enviar datos, tiene muchas limitaciones que `POST` no tiene. Su fin es más genérico, envía información para que quién la reciba haga lo que estime con ella. `POST` no es idempotente. Una nueva petición `POST` tendría  un efecto distinto que la primera llamada (por ejemplo, dos peticiones seguidas insertarían 2 usuarios en la base de datos).
 
 ```http
 POST localhost:8080/api/usuario/user
