@@ -412,7 +412,9 @@ La anotación `@ResponseBody` le indica a un controlador que el objeto que retor
 public class APIController {
 	public final ArticulosService articulosService;
     
-    public APIController(ArticulosService articulosService){}
+    public APIController(ArticulosService articulosService){
+        this.articulosService = articulosService;
+    }
 
     ...
         
@@ -502,7 +504,7 @@ public class APIController {
 
 Hacer un proyecto Spring Boot, con un REST de usuarios funcional como el siguiente. El servicio será un mock que actuará sobre una colección.
 
-![Vista pre](img/04/02.png)
+![Vista previa de la aplicación](img/04/02.png)
 
 En https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practica-6 encontrarás los siguientes recursos para reutilizar:
 
@@ -519,8 +521,8 @@ En https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practi
 1. Primero deberemos completar el servicio. En orden haremos:
    1. Creamos en el paquete `users`, una clase llamada `UserServiceImpl`.
    2. Convertimos la clase en un servicio, usando la anotación correspondiente.
-   3. La clase tendrá un sólo atributo privado, `private List<User> listaUsuarios;`. En el constructor de la clase inicializaremos ese atributo a un nuevo `ArrayList<User>` vacío.
-   4. La clase implementará la interfaz `UserService`, sobrescribiendo todos los métodos abstractos heredados por la interfaz.
+   3. La clase implementará la interfaz `UserService`, sobrescribiendo todos los métodos abstractos heredados por la interfaz.
+   4. La clase tendrá un sólo atributo privado, `private List<User> listaUsuarios;`. En el constructor de la clase inicializaremos ese atributo a un nuevo `ArrayList<User>` vacío.
    5. Cada método heredado actuará sobre el atributo de la clase `listaUsuarios`, como si de una base de datos se tratara. De forma que nuestro servicio “imitará” el funcionamiento de una base de datos. Desde fuera del servicio, parecerá que está tratando internamente con una base de datos.
    6. En `UserService`, cada método tiene un comentario explicando lo que debería hacer cada método del servicio. Esto deberá implementarse en `UserServiceImpl`. Son acciones simples, entre 1 y 4 líneas cada uno como máximo. Si tenéis dudas en alguna preguntar y se aclarará.
 2. Crear el controlador `APIController`. Aquí es donde se definirán las url que se pueden ver en `home.html` (o en la captura).
@@ -622,15 +624,18 @@ Para hacer una petición que borre un recurso, en lugar de hacerlo mediante el m
 @RestController
 @RequestMapping("/api")
 public class APIController {
-	@Autowired
-	UserService userService;
+	public final ArticulosService articulosService;
+    
+    public APIController(ArticulosService articulosService){
+        this.articulosService = articulosService;
+    }
 	
 	@GetMapping("/usuarios")
 	public List<User> getAllUsers(){
 		return userService.getAll();
 	}
 	...	
-	@DeleteMapping("/usuarios/")
+	@DeleteMapping("/usuarios")
 	public void deleteAllUsers() {
 		userService.deleteAll();
 	}
@@ -854,7 +859,7 @@ public class UserServiceImpl implements UserService {
 	...
 	@Override
 	public User update(User nuevo, int id) {
-		User actualizado = null;
+		User actualizado = this.getUserB;
 		for (User u: this.listaUsuarios) {
 			if (u.getId() == id) {
 				u.setEmail(nuevo.getEmail());
@@ -875,7 +880,7 @@ Añadimos el método al `APIController`, usando el servicio anterior.
 public class APIController {
 	...
 	
-	@PutMapping("/usuario/{id}")
+	@PutMapping("/usuario/id/{id}")
 	public User updateUser(
 			@PathVariable Integer id,
 			@RequestBody User userUpdated
