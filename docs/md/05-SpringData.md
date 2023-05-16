@@ -172,21 +172,30 @@ MariaDB [(none)]>
 5. Eso es debido a que hemos añadido las dependencias de JPA y MySQL, pero no hemos enlazado nuestro proyecto con ninguna base de datos. Así que tendremos que tocar por primera vez el archivo **`application.properties`** para indicarle lo siguiente:
 
    ```properties
-   # Base de datos MySQL
+   # Si usamos el driver de MySQL...
    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
    spring.datasource.url=jdbc:mysql://localhost:3306/dbejemplo
    spring.datasource.username=root
    spring.datasource.password=
    ```
 
+	```properties
+	# Si usamos el driver de MariaDB...
+	spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+	spring.datasource.url=jdbc:mariadb://localhost:3306/dbejemplo
+	spring.datasource.username=root
+	spring.datasource.password=
+	```
+
+
   - En el `driver`, pondremos siempre el que viene ahí. Si usamos otro tipo de base de datos, usaremos el driver que indique el fabricante.
   - En la `url` deberemos indicarle la url de acceso a nuestra BD (dominio+servidor+puerto+base de datos). En nuestro caso,  la base de datos es `dbejemplo`, que es la que teníamos preparada.
   - El `username` por defecto es `root`. La contraseña por defecto está vacía, por eso no indicamos nada. Si configuramos otro usuario y/o contraseña en la BD aquí es donde la estableceremos.
 
 
-   > **Nota1:** Es posible que el archivo `application.properties` por defecto no esté en UTF-8, y si usamos tildes o ñ, nos de problema Maven. Deberemos *pulsar botón derecho sobre el archivo -> Properties -> Text file encoding -> Other -> UTF-8*. 
+   > 🗒**Nota1:** Es posible que el archivo `application.properties` por defecto no esté en UTF-8, y si usamos tildes o ñ, nos de problema Maven. Deberemos *pulsar botón derecho sobre el archivo -> Properties -> Text file encoding -> Other -> UTF-8*. 
    >
-   > **Nota2:** En cualquier caso, si Maven nos da un error en el `pom.xml` que no tenga mucho sentido, se puede arreglar pulsando *botón derecho sobre el proyecto -> Maven -> Update Project -> Ok*. Esto puede pasar si alguna dependencia se ha quedado a medio descargar en la caché.
+   > 🗒**Nota2:** En cualquier caso, si Maven nos da un error en el `pom.xml` que no tenga mucho sentido, se puede arreglar pulsando *botón derecho sobre el proyecto -> Maven -> Update Project -> Ok*. Esto puede pasar si alguna dependencia se ha quedado a medio descargar en la caché.
 
 6. Y ya arrancará nuestra aplicación llevándonos a `index.html` como siempre. En siguientes apartados, añadiremos datos a la base de datos y los mostraremos en la vista.
 
@@ -197,6 +206,8 @@ MariaDB [(none)]>
 Cuando desarrollamos una aplicación en Java, uno de los primeros requerimientos que debemos resolver es la integración con una base de datos para guardar, actualizar, borrar y recuperar la información que utiliza nuestra aplicación.
 
 Se llama “persistencia” de los objetos a su capacidad para guardarse y recuperarse desde un medio de almacenamiento. La persistencia en Base de Datos relacionales se suele implementar mediante el desarrollo de funcionalidad específica utilizando la tecnología JDBC o mediante frameworks que automatizan el proceso a partir de mapeos (conocidos como *Object Relational Mapping*, ORM) como es el caso de Hibernate.
+
+<img src="img/05/image-20230516102325922.png" alt="Ejemplo de un ORM" style="zoom:67%;" />
 
 Spring Boot simplifica todo el proceso, eliminando archivos xml y clases Java de configuración.
 
@@ -289,6 +300,8 @@ public class User {
 }
 ```
 
+> 🌶 Es un buen momento para probar la librería Lombok y dejar la clase `User` muc
+
 
 
 Ahora deberíamos de ir a nuestra base de datos, crear un script para definir la tabla Usuarios con los campos id, userName y password… etc, definir los tipos de los campos de MySQL compatibles con los tipos de Java. En resumidas cuentas, **debemos** **conocer el lenguaje SQL**, y no solo las consultas DML (*Data Manipulation Language*), si no también las DDL (*Data Definition Language*) para la creación de las bases de datos y sus restricciones.
@@ -298,11 +311,11 @@ Si más adelante, decidimos añadir un atributo a nuestra clase (o modificar alg
 Con Spring Data, sólo tenemos que añadir una serie de anotaciones, y JPA se encargará de **CREAR** la tabla por nosotros realizando las conversiones entre los tipos de datos de Java y MySQL. Las anotaciones serán las siguientes:
 
 ```java
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name="usuarios")
@@ -385,7 +398,7 @@ Para acceder a los datos, usamos servicios, que desarrollarían cada uno de los 
 
 El repositorio es una especie de servicio que ya tiene desarrollado todos los métodos necesarios para interactuar con la base de datos, pudiendo prescindir de la típica capa DAO.
 
-**Tan sólo tenemos que definir la interfaz**. Nuestra interfaz heredará de la interfaz `JpaRepository`. **Punto, no hay más**.
+**Tan solo tenemos que definir la interfaz**. Nuestra interfaz heredará de la interfaz `JpaRepository`. **Punto, no hay más**.
 
 ```java
 import org.springframework.data.jpa.repository.JpaRepository;
