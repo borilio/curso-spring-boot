@@ -434,12 +434,15 @@ Siguiendo nuestro ejemplo, lo vamos a usar en el `HomeController` para añadir u
 ```java
 @Controller
 public class HomeController {
+    
+	private final UserRepo userRepo;
+    
+    public HomeController(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
 
-	@Autowired
-	private UserRepo userRepo;
-
-    ...
-        
+    //...
+    
     @GetMapping("/usuario/nuevo/{email}")
 	public String creaUsuario(
 			@PathVariable String email
@@ -450,7 +453,6 @@ public class HomeController {
 		return "index";
 	}
 }
-
 ```
 
 > 💡**Nota:** Aquí inyectamos el repositorio directamente en el `HomeController` para simplificar el código, pero sería conveniente crear un servicio y usar el repositorio desde el servicio, tal y como hemos visto anteriormente. 
