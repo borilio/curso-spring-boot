@@ -402,10 +402,13 @@ El repositorio es una especie de servicio que ya tiene desarrollado todos los m�
 
 ```java
 import org.springframework.data.jpa.repository.JpaRepository;
+@Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
 	
 }
 ```
+
+> 🤓 La anotación `@Repository` es opcional. Spring Boot lo usa de forma implícita. Aunque se considera una buena práctica usarla y así no nos olvidamos de poner las anotaciones `@Controller` y `@Service`, para los controladores y servicios respectivamente.
 
 La implementación de los métodos ya están desarrollados en la clase `JpaRepository`. Tenemos que parametrizarle la clase del objeto con la que va a tratar (en nuestro ejemplo, `User`), y la clase del tipo de dato de su clave primaria (en nuestro ejemplo, `Integer`).
 
