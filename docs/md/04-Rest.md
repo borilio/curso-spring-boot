@@ -195,6 +195,42 @@ public class APIController {
 
 > 🤓Técnicamente, el alcance de todas las anotaciones de Spring (`@Service`, `@Controller`, etc.) es un *Singleton*. Eso es otro patrón de diseño que consiste en crear una única instancia del objeto, que es la que se inyecta. De forma que no estamos creando múltiples instancias del mismo objeto en cada método.
 
+## Microservicios
+
+Los microservicios son un enfoque arquitectónico para el desarrollo de aplicaciones que consiste en dividir una aplicación monolítica en múltiples servicios pequeños e independientes, cada uno de los cuales se enfoca en una función específica y se ejecuta de manera autónoma. Cada microservicio se puede implementar, escalar y actualizar de forma independiente, lo que permite una mayor flexibilidad y agilidad en el desarrollo y despliegue de la aplicación.
+
+**La principal diferencia** entre los servicios tradicionales y los microservicios **radica en su tamaño y alcance**. Los servicios tradicionales, también conocidos como servicios monolíticos, suelen ser componentes más grandes que encapsulan múltiples funciones y características de una aplicación. Estos servicios monolíticos suelen estar altamente acoplados y dependen de una única base de código y una única base de datos.
+
+Por otro lado, los **microservicios son unidades más pequeñas y autónomas** de funcionalidad dentro de una aplicación. Cada microservicio se desarrolla y despliega de forma independiente, y puede tener su propia base de código y base de datos. Los microservicios se comunican entre sí a través de mecanismos como APIs (interfaces de programación de aplicaciones) o mensajes, lo que permite una mayor flexibilidad y escalabilidad.
+
+Algunas diferencias clave entre los servicios tradicionales y los microservicios son:
+
+1. **Tamaño y alcance:** Los servicios tradicionales son componentes más grandes y abarcan múltiples funciones de una aplicación, mientras que los microservicios se centran en una única funcionalidad específica.
+2. **Acoplamiento**: Los servicios tradicionales suelen estar altamente acoplados, lo que significa que un cambio en una parte del servicio puede afectar otras partes. En contraste, los microservicios son más independientes y tienen un bajo acoplamiento.
+3. **Despliegue y escalado:** Los servicios tradicionales se despliegan y escalan como una sola unidad, mientras que los microservicios se pueden desplegar y escalar de forma independiente, lo que permite un mayor nivel de flexibilidad y eficiencia.
+4. **Mantenimiento y actualización**: Los servicios tradicionales requieren actualizaciones y mantenimiento más complejos debido a su tamaño y dependencias internas. En cambio, los microservicios permiten actualizaciones y mantenimiento más granulares y específicos para cada microservicio.
+
+Es importante destacar que la diferencia clave entre un servicio tradicional y un microservicio no radica en las anotaciones o el código en sí, sino en la arquitectura y la organización del sistema en su conjunto. **El código necesario o anotaciones usadas para realizar un microservicio es exactamente el mismo que para realizar un servicio.**
+
+En un enfoque de microservicios, los componentes se desarrollan, despliegan y escalan de forma independiente, mientras que en un servicio tradicional, todos los componentes están agrupados en una única base de código y se despliegan y escalan juntos.
+
+**Ejemplo de uso:**
+
+Imagina que estás desarrollando una aplicación de comercio electrónico que consta de varios microservicios. Cada microservicio se encarga de una funcionalidad específica de la aplicación y se comunica con otros microservicios para realizar tareas relacionadas.
+
+1. Microservicio de autenticación: Se encarga de gestionar la autenticación y autorización de los usuarios. Proporciona endpoints (son las distintas url de un API REST, que verás en el siguiente apartado) para registrar usuarios, iniciar sesión, generar tokens de acceso, etc.
+2. Microservicio de catálogo de productos: Se ocupa de gestionar el catálogo de productos de la tienda en línea. Proporciona endpoints para obtener información de los productos, agregar nuevos productos, actualizar información, etc.
+3. Microservicio de carrito de compras: Se encarga de gestionar el carrito de compras de los usuarios. Proporciona endpoints para agregar productos al carrito, eliminar productos, calcular el total, etc.
+4. Microservicio de procesamiento de pagos: Se encarga de procesar los pagos de los pedidos realizados por los usuarios. Se comunica con servicios externos de pago para procesar transacciones y actualizar el estado de los pagos.
+
+En este escenario, cada microservicio tiene su propia base de código, su propio conjunto de endpoints y su propia lógica de negocio. Cada microservicio se desarrolla, despliega y escala de forma independiente, lo que permite un mayor grado de flexibilidad y modularidad en el desarrollo y mantenimiento de la aplicación.
+
+La comunicación entre los microservicios generalmente se realiza a través de API RESTful (lo verás en el siguiente apartado) o mediante el uso de mensajería asincrónica, como colas de mensajes. Por ejemplo, el microservicio de carrito de compras puede comunicarse con el microservicio de catálogo de productos para obtener información sobre los productos, y el microservicio de procesamiento de pagos puede comunicarse con el microservicio de carrito de compras para obtener los detalles de los pedidos y procesar los pagos.
+
+En resumen, el uso de microservicios en esta aplicación de comercio electrónico permite dividir la funcionalidad en componentes más pequeños y especializados, lo que facilita el desarrollo, la escalabilidad y el mantenimiento del sistema en general. Cada microservicio se desarrolla y despliega como una aplicación independiente, y se comunican entre sí para ofrecer una funcionalidad completa y coherente a los usuarios.
+
+---
+
 # REST
 
 ## ¿Qué es REST?
@@ -532,6 +568,8 @@ En https://github.com/borilio/curso-spring-boot/tree/master/assets/clases/practi
 3. Comprobar que todo lo indicado en `home.html` funciona.
 
 💡Verás que haciendo uso del servicio, las acciones para interactuar con la “base de datos” se resumen a UNA LINEA DE CÓDIGO. Y lo mejor es que este servicio *mock*, puede ser fácilmente sustituido por uno real que sí acceda a una base de datos real, dejando el código del controlador intacto.
+
+---
 
 # Métodos de petición HTTP
 
