@@ -87,7 +87,7 @@ MariaDB [(none)]>
 
    - 🆕Spring Data JPA
 
-   - 🆕MySQL Driver
+   - 🆕MySQL Driver o MariaDB Driver
 
    - Spring Web
 
@@ -300,7 +300,7 @@ public class User {
 }
 ```
 
-> 🌶 Es un buen momento para probar la librería Lombok y dejar la clase `User` muc
+> 🌶 Es un buen momento para probar la librería Lombok y dejar la clase `User` mucho más limpia.
 
 
 
@@ -413,7 +413,7 @@ Y ya tenemos disponible el repositorio, que una vez esté inyectado en el contro
 
 ![Repositorios](img/05/02.png)
 
-Todo esto sin  tener que cargar driver con`DriverManager`, crear una conexión con `getConnection()`, datasource, crear objetos `Statement` o `PreparedStatement` y manejar ninguna instrucción SQL, que nos devuelva objetos `Resultset`, con lo entretenido que eran manejarlos. Y por supuesto capturar las mil excepciones que se podían producir en cada uno de los pasos.
+Todo esto sin tener que cargar driver con`DriverManager`, crear una conexión con `getConnection()`, datasource, crear objetos `Statement` o `PreparedStatement` y manejar ninguna instrucción SQL, que nos devuelva objetos `Resultset`, con lo entretenido que eran manejarlos. Y por supuesto capturar las mil excepciones que se podían producir en cada uno de los pasos.
 
 > 🤓**Nota**: En algunos manuales verás que también usan `CrudRepository` en lugar de `JpaRepository`. La principal diferencia es que [`JpaRepository`](http://static.springsource.org/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/JpaRepository.html) hereda de [`PagingAndSortingRepository`](http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/PagingAndSortingRepository.html), que a su vez, hereda de [`CrudRepository`](http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html). 
 >
@@ -572,7 +572,6 @@ Para borrar algún registro de la base de datos, los repositorios tienen muchas 
 ```java
 User userBuscado = userRepo.findByEmail("enrico.palazzo@acp2.com");
 userRepo.delete(userBuscado); //Borramos el usuario buscado
-
 userRepo.deleteById(5); //Borramos el usuario cuya id es 5
 ```
 
@@ -611,7 +610,7 @@ Y si hacemos una consulta a `/usuario/username/maxpower@ejemplo.com`, veremos po
 User [id=5, userName=maxpower@ejemplo.com, email=maxpower@ejemplo.com, password=39b59b54, admin=false]
 ```
 
-🎉Funcionó, sin escribir una consulta SQL, o tener que implementar el código del método `findByUserName()`. 
+🎉Funcionó, sin escribir una consulta SQL o tener que implementar el código del método `findByUserName()`. 
 
 Vamos más allá….se puede hacer cosas tan locas como lo siguiente:
 
