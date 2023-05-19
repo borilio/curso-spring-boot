@@ -430,7 +430,9 @@ Todo esto sin tener que cargar driver con`DriverManager`, crear una conexión co
 
 ## Usando el repositorio
 
-Para usar nuestro repositorio, tendremos que inyectarlo en el controlador (o en el servicio) que queramos con la anotación `@Autowired`, de la misma forma que inyectamos los servicios u otros objetos.
+Para usar nuestro repositorio, tendremos que inyectarlo donde que queramos con la anotación `@Autowired`, de la misma forma que inyectamos los servicios u otros objetos.
+
+![Esquema Objetos Spring Boot](img/05/image-20230519114628776.png)
 
 Siguiendo nuestro ejemplo, lo vamos a usar en el `HomeController` para añadir un nuevo usuario a la tabla. 
 
@@ -587,6 +589,7 @@ Hemos visto que los repositorios tienen muchos métodos para hacer prácticament
 Definimos la firma del método que nos gustaría tener, y como por arte de magia, lo tendremos disponible en nuestro repositorio:
 
 ```java
+@Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
 	public User findByUserName(String userName);
 }
