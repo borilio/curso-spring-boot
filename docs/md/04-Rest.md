@@ -85,12 +85,12 @@ Ahora mismo el servicio de artículos, no los está recuperando de una base de d
 
 ## Añadir funcionalidades al servicio
 
-Si queremos añadir funcionalidades al servicio, habría que añadirle un nuevo método abstracto a la interfaz `ArticulosService`
+Si queremos añadir funcionalidades al servicio, habría que añadirle un nuevo método abstracto a la interfaz `ArticulosService`.
 
 ```java
 public interface ArticulosService {
-    ...
-        public boolean deleteArticulo(int id); //Añadimos un nuevo método para borrar un artículo
+    //...
+	public boolean deleteArticulo(int id); //Añadimos un nuevo método para borrar un artículo
 }
 ```
 
@@ -104,8 +104,9 @@ Al hacer clic en la opción de “*Add unimplemented methods*” nos heredará a
 
 ```java
 public class ArticulosServiceImpl implements ArticulosService {
-	...
-	@Override
+	//...
+	
+    @Override
 	public boolean deleteArticulo(int id) {
 		// TODO Auto-generated method stub
 		return false;
@@ -124,7 +125,7 @@ Spring nos facilita el uso de los servicios con la anotación **`@Service`**. As
 ```java
 @Service
 public class ArticulosServiceImpl implements ArticulosService {
-    ...
+    //...
 }
 ```
 
@@ -180,7 +181,7 @@ public class APIController {
         model.addAttribute("articulo", a);
         return "ficha-articulo";	
     }
-    ...
+    //...
 }	
 ```
 
